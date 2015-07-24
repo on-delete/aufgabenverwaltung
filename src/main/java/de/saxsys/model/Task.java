@@ -195,4 +195,15 @@ public class Task implements Serializable {
         Gson demarshaller = new Gson();
         return demarshaller.fromJson(jsonString, Task.class);
     }
+
+    /**
+     * Creates an JSON Serialization from the calling object object
+     * 
+     * @return The JSON String
+     */
+    public String toJson() {
+        Gson marshaller = new Gson();
+        return marshaller.toJson(this);
+    }
+
 }

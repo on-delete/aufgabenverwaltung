@@ -72,9 +72,20 @@ public class TaskTests {
     
     //Json Tests
     @Test
-    public void testToJson() {
+    public void testStaticToJson() {
         try {
             assertEquals("{\"title\":\"Task1\",\"priority\":1,\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
+    
+    //Json Tests
+    @Test
+    public void testToJson() {
+        try {
+            assertEquals("{\"title\":\"Task1\",\"priority\":1,\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
         }
         catch (Exception e) {
             fail();
