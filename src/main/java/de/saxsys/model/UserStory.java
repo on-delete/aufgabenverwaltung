@@ -86,10 +86,10 @@ public class UserStory {
      *            new title of the userstory (musn't be null)
      */
     public void setTitle(String title) {
-        if (title != null) {
+        if (title != null && title.length()>0) {
             this.title = title;
         } else {
-            throw new IllegalArgumentException("Title musn't be null");
+            throw new IllegalArgumentException("Title musn't be null or empty");
         }
     }
 
