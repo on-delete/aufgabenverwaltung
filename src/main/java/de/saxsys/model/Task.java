@@ -1,14 +1,13 @@
-/**
- * Class for storing information about a task.
- * Includes task title, priority, description (optional) and name of th person in charge for this task (optional).
- */
-
 package de.saxsys.model;
 
 import java.io.Serializable;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+/**
+ * Class for storing information about a task. Includes task title, priority, description (optional) and name of th
+ * person in charge for this task (optional).
+ */
 public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,7 +44,7 @@ public class Task implements Serializable {
     }
 
     /**
-     * Create a Task without person in charge
+     * Create a Task with all information
      * 
      * @param title
      *            Title of the new Task object
@@ -114,10 +113,14 @@ public class Task implements Serializable {
      * Set a new task description in the Task object
      * 
      * @param description
-     *            new priority for the Task object
+     *            new description for the Task object
      */
     public void setDescription(String description) {
-        this.description = description;
+        if (description != null) {
+            this.description = description;
+        } else {
+            this.description = "";
+        }
     }
 
     /**
@@ -127,7 +130,11 @@ public class Task implements Serializable {
      *            new name of person in charge for the Task object
      */
     public void setInCharge(String inCharge) {
-        this.inCharge = inCharge;
+        if (inCharge != null) {
+            this.inCharge = inCharge;
+        } else {
+            this.inCharge = "";
+        }
     }
 
     /**

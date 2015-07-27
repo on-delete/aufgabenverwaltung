@@ -12,62 +12,33 @@ public class TaskTests {
         task = new Task("Task1", 1, "A standard Task", "Person");
     }
     
+    //Constructor test
+    @Test
+    public void testConstructor() {
+        Task task2 = new Task("Task2", 2);
+        
+        assertNotNull(task2);
+        assertEquals("Task2", task2.getTitle());
+        assertEquals(2, task2.getPriority());
+        assertEquals("", task2.getDescription());
+        assertEquals("", task2.getInCharge());
+    }
+    
     //Equals Test
     @Test
     public void testEquals() {
         Task task1 = task; //same object
         Task task2 = new Task("Task1", 1, "A standard Task", "Person"); //object that is equal
         Task task3 = new Task("Task3", 1, "A standard Task", "Person"); //object that is different
+        Task task4 = new Task("Task4", 1); //object that contains null values
+        Task task5 = new Task("Task4", 1); //object that contains null values which is equal to the other one
         
         assertTrue(task.equals(task1));
         assertTrue(task.equals(task2));
         assertFalse(task.equals(task3));
-    }
-    
-    //Get Tests
-    @Test
-    public void testGetTitle() {
-        assertEquals("Task1", task.getTitle());
-    }
-    
-    @Test
-    public void testGetPriority() {
-        assertEquals(1, task.getPriority());
-    }
-    
-    @Test
-    public void testGetDescription() {
-        assertEquals("A standard Task", task.getDescription());
-    }
-    
-    @Test
-    public void testGetInCharge() {
-        assertEquals("Person", task.getInCharge());
-    }
-    
-    //Set Tests
-    @Test
-    public void testSetTitle() {
-        task.setTitle("Task2");
-        assertEquals("Task2", task.getTitle());
-    }
-    
-    @Test
-    public void testSetPriority() {
-        task.setPriority(2);
-        assertEquals(2, task.getPriority());
-    }
-    
-    @Test
-    public void testSetDescription() {
-        task.setDescription("Changed Description");
-        assertEquals("Changed Description", task.getDescription());
-    }
-    
-    @Test
-    public void testSetInCharge() {
-        task.setInCharge("Person2");
-        assertEquals("Person2", task.getInCharge());
+        assertFalse(task.equals(task4));
+        assertFalse(task4.equals(task));
+        assertTrue(task4.equals(task5));
     }
     
     //Json Tests
