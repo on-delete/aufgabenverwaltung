@@ -306,7 +306,7 @@ public class UserStory {
         if (this == comp) {
             return true;
         } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority() == comp.getPriority()
-                && this.getDescription().equals(comp.getDescription())) {
+                && this.getDescription().equals(comp.getDescription()) && this.taskEquals(comp)) {
             return true;
         } else {
             return false;
@@ -371,5 +371,19 @@ public class UserStory {
     public String toJson() {
         Gson marshaller = new Gson();
         return marshaller.toJson(this);
+    }
+    
+    private boolean taskEquals(UserStory comp) {
+        if (this.getNumberOfTasks() != comp.getNumberOfTasks()) {
+            return false;
+        }
+        else {
+            for (int i = 0; i <= this.getNumberOfTasks()-1; i++) {
+                if (!this.getTask(i).equals(comp.getTask(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }

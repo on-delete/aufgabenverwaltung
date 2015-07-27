@@ -1,7 +1,7 @@
 package de.saxsys.model;
 
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.junit.Before;
@@ -63,7 +63,27 @@ public class UserStoryTest {
 
         assertTrue(testTask.equals(userstory.getTask("Task2")));
     }
-
+    
+    @Test
+    public void testAddTask() {
+        assertTrue(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding new task
+        assertNotNull(userstory.getTask("Task6"));
+        
+        assertFalse(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding task that allready exists
+    } 
+    
+    @Test
+    public void testAddAllTasks() {
+        List<Task> tasks = new ArrayList<Task>();
+        tasks.add(new Task("Task3", Priority.MIDDLE));  //adding task that allready exists
+        tasks.add(new Task("Task6", Priority.LOW)); //adding new task
+        tasks.add(new Task("Task7", Priority.VERY_LOW)); //adding new task
+        
+        assertEquals(2, userstory.addAllTasks(tasks));
+        assertNotNull(userstory.getTask("Task6"));
+        assertNotNull(userstory.getTask("Task7"));
+    }
+    
     @Test
     public void testRemoveTask() {
         assertTrue(userstory.removeTask("Task4"));
@@ -86,7 +106,7 @@ public class UserStoryTest {
         
         UserStory userstoryFromJson = UserStory.fromJson(jsonString);
         
-        assertEquals(userstory, userstory);
+        assertTrue(userstory.equals(userstoryFromJson));
     }
     
     @Test
@@ -115,5 +135,25 @@ public class UserStoryTest {
         
         assertEquals("Task4", userstory.getTask(4).getTitle());
         assertEquals("Task5", userstory.getTask(3).getTitle());
+    }
+    
+    @Test
+    public void testEquals() {
+        List<Task> tasks = new ArrayList<Task>();
+        tasks.add(new Task("Task1", Priority.HIGH));
+        tasks.add(new Task("Task2", Priority.HIGH));
+        tasks.add(new Task("Task3", Priority.MIDDLE));
+        tasks.add(new Task("Task4", Priority.LOW));
+        UserStory userstory2 = new UserStory("Story1", Priority.HIGH, tasks, "An userstory");
+        
+        assertFalse(userstory.equals(userstory2));
+        
+        userstory2.addTask(new Task("Task5", Priority.VERY_LOW));
+        assertTrue(userstory.equals(userstory2));
+        
+        userstory2.setTitle("Story2");
+        assertFalse(userstory.equals(userstory2));
+        
+        assertTrue(userstory.equals(userstory));
     }
 }
