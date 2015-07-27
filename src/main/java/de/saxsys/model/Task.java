@@ -13,7 +13,7 @@ public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
-    private int priority;
+    private Priority priority;
     private String description;
     private String inCharge;
 
@@ -25,7 +25,7 @@ public class Task implements Serializable {
      * @param priority
      *            Priority of the new Task object
      */
-    public Task(String title, int priority) {
+    public Task(String title, Priority priority) {
         this(title, priority, null);
     }
 
@@ -39,7 +39,7 @@ public class Task implements Serializable {
      * @param description
      *            description of the new Task object
      */
-    public Task(String title, int priority, String description) {
+    public Task(String title, Priority priority, String description) {
         this(title, priority, description, null);
     }
 
@@ -59,7 +59,7 @@ public class Task implements Serializable {
      * @throws IllegalArgumentException
      *             If priority is 0
      */
-    public Task(String title, int priority, String description, String inCharge) {
+    public Task(String title, Priority priority, String description, String inCharge) {
         setTitle(title);
         setPriority(priority);
         setDescription(description);
@@ -69,7 +69,7 @@ public class Task implements Serializable {
     public boolean equals(Task comp) {
         if (this == comp) {
             return true;
-        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority() == comp.getPriority()
+        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
                 && this.getDescription().equals(comp.getDescription()) && this.getInCharge().equals(comp.getInCharge())) {
             return true;
         } else {
@@ -101,11 +101,11 @@ public class Task implements Serializable {
      * @throws IllegalArgumentException
      *             If priority is 0
      */
-    public void setPriority(int priority) {
-        if (priority > 0) {
+    public void setPriority(Priority priority) {
+        if (priority != null) {
             this.priority = priority;
         } else {
-            throw new IllegalArgumentException("Priority must be bigger than 0");
+            this.priority = Priority.MIDDLE;
         }
     }
 
@@ -151,7 +151,7 @@ public class Task implements Serializable {
      * 
      * @return The priority as an int
      */
-    public int getPriority() {
+    public Priority getPriority() {
         return this.priority;
     }
 
