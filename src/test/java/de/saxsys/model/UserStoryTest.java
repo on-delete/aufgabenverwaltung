@@ -94,7 +94,7 @@ public class UserStoryTest {
     @Test
     public void testToJSON() {
         //Json representation of the userstory object
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
+        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         assertEquals(jsonString, userstory.toJson());
         assertEquals(jsonString, UserStory.toJson(userstory));
     }
@@ -102,7 +102,7 @@ public class UserStoryTest {
     @Test
     public void testFromJSON() {
         //Json representation of an UserStory object, which equals userstory
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
+        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         
         UserStory userstoryFromJson = UserStory.fromJson(jsonString);
         

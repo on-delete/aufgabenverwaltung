@@ -14,6 +14,7 @@ public class Task implements Serializable {
 
     private String title;
     private Priority priority;
+    private Status status;
     private String description;
     private String inCharge;
 
@@ -64,6 +65,7 @@ public class Task implements Serializable {
         setPriority(priority);
         setDescription(description);
         setInCharge(inCharge);
+        this.status = Status.TODO;
     }
 
     public boolean equals(Task comp) {
@@ -97,15 +99,32 @@ public class Task implements Serializable {
      * Set a new task priority in the Task object
      * 
      * @param priority
-     *            new priority for the Task object; 0 is not allowed
-     * @throws IllegalArgumentException
-     *             If priority is 0
+     *            new priority for the Task object; Default: MIDDLE
      */
     public void setPriority(Priority priority) {
         if (priority != null) {
             this.priority = priority;
         } else {
             this.priority = Priority.MIDDLE;
+        }
+    }
+    
+    
+    /**
+     * Set a new task status in the Task object
+     * 
+     * @param status
+     *            new status for the Task object; Default: TODO
+     */
+    public boolean increaseStatus() {
+        if (getStatus().equals(Status.TODO)) {
+            this.status = Status.IN_PROGRESS;
+            return true;
+        } else if (getStatus().equals(Status.IN_PROGRESS)) {
+            this.status = Status.DONE;
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -149,12 +168,21 @@ public class Task implements Serializable {
     /**
      * Gets the priority of the task
      * 
-     * @return The priority as an int
+     * @return The priority of the task
      */
     public Priority getPriority() {
         return this.priority;
     }
-
+    
+    /**
+     * Gets the status of the task
+     * 
+     * @return The status of the task
+     */
+    public Status getStatus() {
+        return this.status;
+    }
+    
     /**
      * Gets the description of the task
      * 

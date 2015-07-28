@@ -20,6 +20,7 @@ public class TaskTests {
         assertNotNull(task2);
         assertEquals("Task2", task2.getTitle());
         assertEquals(Priority.MIDDLE, task2.getPriority());
+        assertEquals(Status.TODO, task2.getStatus());
         assertEquals("", task2.getDescription());
         assertEquals("", task2.getInCharge());
     }
@@ -41,22 +42,33 @@ public class TaskTests {
         assertTrue(task4.equals(task5));
     }
     
+    //Increase status test
+    @Test
+    public void testIncreaseStatus() {
+        assertEquals(Status.TODO, task.getStatus());
+        assertTrue(task.increaseStatus());
+        assertEquals(Status.IN_PROGRESS, task.getStatus());
+        assertTrue(task.increaseStatus());
+        assertEquals(Status.DONE, task.getStatus());
+        assertFalse(task.increaseStatus());
+        assertEquals(Status.DONE, task.getStatus());
+    }
+    
     //Json Tests
     @Test
     public void testStaticToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
+            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
         }
         catch (Exception e) {
             fail();
         }
     }
     
-    //Json Tests
     @Test
     public void testToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
+            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
         }
         catch (Exception e) {
             fail();
@@ -65,7 +77,7 @@ public class TaskTests {
     
     @Test
     public void testFromJson() {
-        Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
+        Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
         assertTrue(task.equals(task2));
     }
 }
