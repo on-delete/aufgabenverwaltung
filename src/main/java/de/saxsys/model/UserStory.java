@@ -3,6 +3,7 @@ package de.saxsys.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -250,6 +251,14 @@ public class UserStory {
     }
     
     /**
+     * gets the Stream of the task list
+     * @return the stream
+     */
+    public Stream<Task> getStream() {
+        return tasks.stream();
+    }
+    
+    /**
      * Increases the position of a task by 1
      * @param title the title of the target to be moved
      * @return true if the movement was successsfull
@@ -306,7 +315,7 @@ public class UserStory {
         if (this == comp) {
             return true;
         } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority() == comp.getPriority()
-                && this.getDescription().equals(comp.getDescription()) && this.taskEquals(comp)) {
+                && this.getDescription().equals(comp.getDescription()) && this.tasksEquals(comp)) {
             return true;
         } else {
             return false;
@@ -351,20 +360,23 @@ public class UserStory {
      * @param jsonString
      *            The JSON serialization to be nmarshalled
      * @return The created Task object
-     * @throws JsonMappingException
-     *             if the parsed data couldn't be mapped to the object
-     * @throws JsonParseException
-     *             if the data couldn't be parsed
-     * @throws IOException
-     *             shouldn't occur
+     * @throws JsonSyntaxException
+     *             if the parsed data were incorrect Json
+     * @throws IllegalArgumentsException
+     *             if the Json String couldn't be mapped to the object
      */
     public static UserStory fromJson(String jsonString) throws JsonSyntaxException {
         Gson demarshaller = new Gson();
-        return demarshaller.fromJson(jsonString, UserStory.class);
+        UserStory userstoryObject = demarshaller.fromJson(jsonString, UserStory.class);
+        if (userstoryObject.containsNull()) {
+            throw new IllegalArgumentException("Json couldn't be mapped to UserStory");
+        } else {
+            return userstoryObject;
+        } 
     }
 
     /**
-     * Creates an JSON Serialization from the calling object object
+     * Creates an JSON Serialization from the calling UserStory object
      * 
      * @return The JSON String
      */
@@ -373,7 +385,13 @@ public class UserStory {
         return marshaller.toJson(this);
     }
     
-    private boolean taskEquals(UserStory comp) {
+    //checks if the object contains null vlues (i.e. after demarshalling vom json)
+    private boolean containsNull() {
+        return (title == null || description == null || tasks == null || priority == null);
+    }
+    
+    //checks if the task lists of this and of another UserStory object are equal
+    private boolean tasksEquals(UserStory comp) {
         if (this.getNumberOfTasks() != comp.getNumberOfTasks()) {
             return false;
         }
