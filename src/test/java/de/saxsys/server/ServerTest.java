@@ -17,20 +17,20 @@ import org.junit.runner.RunWith;
  * Created by andre.krause on 27.07.2015.
  */
 @RunWith(VertxUnitRunner.class)
-public class ServerTestSuite {
+public class ServerTest {
 
-	private static Vertx vertx = null;
+	private Vertx vertx = null;
 	private String testString = "{\"teststring\":\"test\"}";
 
 	@Before
-	public void beforeEach() {
+	public void setUp(TestContext context) {
 		vertx = Vertx.vertx();
-		vertx.deployVerticle(new Server());
+		vertx.deployVerticle(new Server(), context.asyncAssertSuccess());
 	}
 
 	@After
-	public void afterEach() {
-		vertx.close();
+	public void tearDown(TestContext context) {
+		vertx.close(context.asyncAssertSuccess());
 	}
 
 	@Test
