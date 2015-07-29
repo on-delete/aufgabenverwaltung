@@ -1,23 +1,31 @@
 package de.saxsys.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import de.saxsys.gui.Model;
+import de.saxsys.gui.ViewElement;
+
 /**
  * Class for storing information about a userstory. Includes userstory title, priority, description (optional) and a
  * list of associated tasks. The task list is allways sorted by the priority of the task and priorities are without gap.
  */
-public class UserStory {
+public class UserStory implements Model {
     private String title;
     private String description;
     private List<Task> tasks;
     private Priority priority;
-
+    
+    //list vor registerd views
+    private Set<ViewElement> registeredViews;
+    
     /**
      * Create a UserStory object without tasks and description
      * 
@@ -74,6 +82,7 @@ public class UserStory {
      */
     public UserStory(String title, Priority priority, List<Task> tasks, String description) {
         this.tasks = new ArrayList<Task>();
+        this.registeredViews = new HashSet<ViewElement>();
         setTitle(title);
         setPriority(priority);
         addAllTasks(tasks);
@@ -404,4 +413,26 @@ public class UserStory {
             return true;
         }
     }
+    
+    //Model methods
+    
+    /**
+     * Adds en view Element, that will be notified whenever a property is changed
+     * @param view the view Element
+     * @return True if element was added
+     */
+    @Override
+    public boolean registerView(ViewElement view) {
+        return registeredViews.add(view);
+    }
+    
+    /**
+     * Refresh all registered views
+     */
+    @Override
+    public void notifyViews() {
+        for (ViewElement element: registeredViews) {
+            element.refresh();
+        }
+    } 
 }
