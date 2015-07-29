@@ -2,6 +2,9 @@ package de.saxsys.model;
 
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+
 import static org.junit.Assert.*;
 
 public class TaskTest {
@@ -77,7 +80,17 @@ public class TaskTest {
     
     @Test
     public void testFromJson() {
-        Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
-        assertTrue(task.equals(task2));
+        try {
+            Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
+            assertTrue(task.equals(task2));
+        }
+        catch(Exception e){
+            fail();
+        }
+    }
+
+    @Test(expected = IOException.class)
+    public void testStaticToJsonRequiredTitleException() throws IOException{
+        Task.fromJson("{\"title\":null,\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
     }
 }

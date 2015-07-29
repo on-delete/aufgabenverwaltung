@@ -1,21 +1,31 @@
 package de.saxsys.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import io.vertx.ext.auth.User;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Class for storing information about a userstory. Includes userstory title, priority, description (optional) and a
  * list of associated tasks. The task list is allways sorted by the priority of the task and priorities are without gap.
  */
-public class UserStory {
+public class UserStory{
+
+    @JsonProperty(required = true)
     private String title;
     private String description;
     private List<Task> tasks;
     private Priority priority;
+
+    public UserStory(){}
 
     /**
      * Create a UserStory object without tasks and description
@@ -318,20 +328,20 @@ public class UserStory {
      * 
      * @return the string representation in Json
      */
-    @Override
+    /*@Override
     public String toString() {
         return this.toJson();
-    }
+    }*/
 
     /**
      * Generates a hashCode of the object
      * 
      * @return the hashCode
      */
-    @Override
+    /*@Override
     public int hashCode() {
         return this.toJson().hashCode();
-    }
+    }*/
 
     /**
      * Creates an JSON Serialization of the given Task object
@@ -340,9 +350,9 @@ public class UserStory {
      *            The task objhect to be serialized
      * @return The JSON String
      */
-    public static String toJson(UserStory inputUserStory) {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(inputUserStory);
+    public static String toJson(UserStory inputUserStory) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(inputUserStory);
     }
 
     /**
@@ -358,9 +368,9 @@ public class UserStory {
      * @throws IOException
      *             shouldn't occur
      */
-    public static UserStory fromJson(String jsonString) throws JsonSyntaxException {
-        Gson demarshaller = new Gson();
-        return demarshaller.fromJson(jsonString, UserStory.class);
+    public static UserStory fromJson(String jsonString) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(jsonString, UserStory.class);
     }
 
     /**
@@ -368,9 +378,9 @@ public class UserStory {
      * 
      * @return The JSON String
      */
-    public String toJson() {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(this);
+    public String toJson() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(this);
     }
     
     private boolean taskEquals(UserStory comp) {

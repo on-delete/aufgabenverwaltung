@@ -1,8 +1,14 @@
 package de.saxsys.model;
 
+import java.io.IOException;
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import org.codehaus.jackson.JsonGenerationException;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * Class for storing information about a task. Includes task title, priority, description (optional) and name of th
@@ -12,11 +18,14 @@ public class Task implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @JsonProperty(required = true)
     private String title;
     private Priority priority;
     private Status status;
     private String description;
     private String inCharge;
+
+    public Task(){}
 
     /**
      * Create a Task without description and person in charge
@@ -208,9 +217,9 @@ public class Task implements Serializable {
      *            The task objhect to be serialized
      * @return The JSON String
      */
-    public static String toJson(Task inputTask) {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(inputTask);
+    public static String toJson(Task inputTask) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(inputTask);
     }
 
     /**
@@ -226,9 +235,9 @@ public class Task implements Serializable {
      * @throws IOException
      *             shouldn't occur
      */
-    public static Task fromJson(String jsonString) throws JsonSyntaxException {
-        Gson demarshaller = new Gson();
-        return demarshaller.fromJson(jsonString, Task.class);
+    public static Task fromJson(String jsonString) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(jsonString, Task.class);
     }
 
     /**
@@ -236,9 +245,9 @@ public class Task implements Serializable {
      * 
      * @return The JSON String
      */
-    public String toJson() {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(this);
+    public String toJson() throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(this);
     }
 
 }
