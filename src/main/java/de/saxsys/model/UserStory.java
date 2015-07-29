@@ -22,14 +22,15 @@ import de.saxsys.gui.ActiveViewElement;
  */
 public class UserStory implements Model {
     private String title;
-    private String description;
-    private List<Task> tasks;
+    private String description = "";
+    private List<Task> tasks = new ArrayList<>();
     private Priority priority;
 
     // list vor registerd views
     private Set<ActiveViewElement> registeredViews;
+
     
-    //constructo for Jackson, shouldn't be used
+    //constructor for Jackson, shouldn't be used
     private UserStory(){}
     
     /**
