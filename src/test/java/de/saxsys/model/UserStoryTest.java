@@ -1,9 +1,11 @@
 package de.saxsys.model;
 
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -61,13 +63,13 @@ public class UserStoryTest {
     public void testGetTask() {
         Task testTask = new Task("Task2", Priority.HIGH);
 
-        assertTrue(testTask.equals(userstory.getTask("Task2")));
+        assertTrue(testTask.equals(userstory.getTaskByTitle("Task2")));
     }
     
     @Test
     public void testAddTask() {
         assertTrue(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding new task
-        assertNotNull(userstory.getTask("Task6"));
+        assertNotNull(userstory.getTaskByTitle("Task6"));
         
         assertFalse(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding task that allready exists
     } 
@@ -80,37 +82,37 @@ public class UserStoryTest {
         tasks.add(new Task("Task7", Priority.VERY_LOW)); //adding new task
         
         assertEquals(2, userstory.addAllTasks(tasks));
-        assertNotNull(userstory.getTask("Task6"));
-        assertNotNull(userstory.getTask("Task7"));
+        assertNotNull(userstory.getTaskByTitle("Task6"));
+        assertNotNull(userstory.getTaskByTitle("Task7"));
     }
     
     @Test
     public void testRemoveTask() {
         assertTrue(userstory.removeTask("Task4"));
 
-        assertNull(userstory.getTask("Task4"));
+        assertNull(userstory.getTaskByTitle("Task4"));
     }
 
     @Test
-    public void testToJSON() {
+    public void testToJSON() throws IOException{
         //Json representation of the userstory object
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]}],\"priority\":\"HIGH\",\"registeredViews\":[]}";
+        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         assertEquals(jsonString, userstory.toJson());
         assertEquals(jsonString, UserStory.toJson(userstory));
     }
     
     @Test
-    public void testFromJSON() {
+    public void testFromJSON() throws IOException{
         //Json representation of an UserStory object, which equals userstory
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\",\"registeredViews\":[]}],\"priority\":\"HIGH\",\"registeredViews\":[]}";
+        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         
         UserStory userstoryFromJson = UserStory.fromJson(jsonString);
         
         assertTrue(userstory.equals(userstoryFromJson));
     }
     
-    @Test(expected=IllegalArgumentException.class)
-    public void testFromJSONException() {
+    @Test(expected=JsonMappingException.class)
+    public void testFromJSONException() throws IOException{
         UserStory userstoryFromJson = UserStory.fromJson("{\"test\":\"test\"}");
     }
     
@@ -129,8 +131,8 @@ public class UserStoryTest {
         assertFalse(userstory.moveTaskUp("Task1"));
         assertTrue(userstory.moveTaskUp("Task5"));
         
-        assertEquals("Task5", userstory.getTask(3).getTitle());
-        assertEquals("Task4", userstory.getTask(4).getTitle());
+        assertEquals("Task5", userstory.getTaskByIndex(3).getTitle());
+        assertEquals("Task4", userstory.getTaskByIndex(4).getTitle());
     }
     
     @Test
@@ -138,8 +140,8 @@ public class UserStoryTest {
         assertFalse(userstory.moveTaskDown("Task5"));
         assertTrue(userstory.moveTaskDown("Task4"));
         
-        assertEquals("Task4", userstory.getTask(4).getTitle());
-        assertEquals("Task5", userstory.getTask(3).getTitle());
+        assertEquals("Task4", userstory.getTaskByIndex(4).getTitle());
+        assertEquals("Task5", userstory.getTaskByIndex(3).getTitle());
     }
     
     @Test

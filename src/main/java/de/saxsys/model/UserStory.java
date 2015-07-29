@@ -1,5 +1,6 @@
 package de.saxsys.model;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -7,8 +8,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
 
 import de.saxsys.gui.Model;
 import de.saxsys.gui.ViewElement;
@@ -22,9 +25,12 @@ public class UserStory implements Model {
     private String description;
     private List<Task> tasks;
     private Priority priority;
-    
-    //list vor registerd views
+
+    // list vor registerd views
     private Set<ViewElement> registeredViews;
+    
+    //constructo for Jackson, shouldn't be used
+    private UserStory(){};
     
     /**
      * Create a UserStory object without tasks and description
@@ -96,7 +102,7 @@ public class UserStory implements Model {
      *            new title of the userstory (musn't be null)
      */
     public void setTitle(String title) {
-        if (title != null && title.length()>0) {
+        if (title != null && title.length() > 0) {
             this.title = title;
         } else {
             throw new IllegalArgumentException("Title musn't be null or empty");
@@ -157,7 +163,15 @@ public class UserStory implements Model {
     public String getDescription() {
         return this.description;
     }
-
+    
+    /**
+     * Gets the task list
+     * @return the task list
+     */
+    public List<Task> getTasks() {
+        return this.tasks;
+    }
+    
     /**
      * Removes all tasks in the list
      */
@@ -173,7 +187,7 @@ public class UserStory implements Model {
      * @return true if task was found and deleted, fasle if title wasn't found
      */
     public boolean removeTask(String title) {
-        Task target = getTask(title);
+        Task target = getTaskByTitle(title);
         return tasks.remove(target);
     }
 
@@ -185,7 +199,7 @@ public class UserStory implements Model {
      * @return true if task was added, false if task was not added (allready existing)
      */
     public boolean addTask(Task input) {
-        if (input != null && getTask(input.getTitle()) == null) {
+        if (input != null && getTaskByTitle(input.getTitle()) == null) {
             this.tasks.add(input);
             return true;
         } else {
@@ -219,7 +233,7 @@ public class UserStory implements Model {
      *            the title of the task
      * @return the Task Object; returns null if task object is not existing
      */
-    public Task getTask(String title) {
+    public Task getTaskByTitle(String title) {
         // find first element which title property matches the input
         Optional<Task> result = tasks.stream().filter((element) -> {
             if (element.getTitle().equals(title)) {
@@ -235,52 +249,56 @@ public class UserStory implements Model {
             return null;
         }
     }
-    
+
     /**
      * Get an Task object by its index in the task list
-     * @param index the index of the desired Task object
+     * 
+     * @param index
+     *            the index of the desired Task object
      * @return the Task object; null if index doesn't exist
      */
-    public Task getTask (int index) {
-        if (index < 0 || index > tasks.size() -1) {
+    public Task getTaskByIndex(int index) {
+        if (index < 0 || index > tasks.size() - 1) {
             return null;
-        }
-        else {
+        } else {
             return tasks.get(index);
         }
     }
-    
+
     /**
      * Gets the number of tasks in the user story
      * 
      * @return the number of tasks
      */
-    public int getNumberOfTasks() {
+    public int numberOfTasks() {
         return tasks.size();
     }
-    
+
     /**
      * gets the Stream of the task list
+     * 
      * @return the stream
      */
-    public Stream<Task> getStream() {
+    public Stream<Task> stream() {
         return tasks.stream();
     }
-    
+
     /**
      * Increases the position of a task by 1
-     * @param title the title of the target to be moved
+     * 
+     * @param title
+     *            the title of the target to be moved
      * @return true if the movement was successsfull
      */
     public boolean moveTaskUp(String title) {
-        Task target = getTask(title);
-        
+        Task target = getTaskByTitle(title);
+
         if (target != null) {
             int oldIndex = tasks.indexOf(target);
-            
+
             if (oldIndex > 0) {
                 tasks.remove(target);
-                tasks.add(oldIndex-1, target);
+                tasks.add(oldIndex - 1, target);
                 return true;
             } else {
                 return false;
@@ -289,21 +307,23 @@ public class UserStory implements Model {
             return false;
         }
     }
-    
+
     /**
      * Decreases the position of a task by 1
-     * @param title the title of the target to be moved
+     * 
+     * @param title
+     *            the title of the target to be moved
      * @return true if the movement was successsfull
      */
     public boolean moveTaskDown(String title) {
-        Task target = getTask(title);
-        
+        Task target = getTaskByTitle(title);
+
         if (target != null) {
             int oldIndex = tasks.indexOf(target);
-            
-            if (oldIndex < (tasks.size()-1)) {
+
+            if (oldIndex < (tasks.size() - 1)) {
                 tasks.remove(target);
-                tasks.add(oldIndex+1, target);
+                tasks.add(oldIndex + 1, target);
                 return true;
             } else {
                 return false;
@@ -312,7 +332,7 @@ public class UserStory implements Model {
             return false;
         }
     }
-    
+
     /**
      * compares the UserStory object with another one
      * 
@@ -338,7 +358,7 @@ public class UserStory implements Model {
      */
     @Override
     public String toString() {
-        return this.toJson();
+        return "{\"title\":\""+title+"\",\"description\":\""+description+"\",\"tasks\":\""+tasks.toString()+"\",\"priority\":\""+priority.toString()+"\"}";
     }
 
     /**
@@ -348,7 +368,7 @@ public class UserStory implements Model {
      */
     @Override
     public int hashCode() {
-        return this.toJson().hashCode();
+        return this.toString().hashCode();
     }
 
     /**
@@ -357,10 +377,12 @@ public class UserStory implements Model {
      * @param inputTask
      *            The task objhect to be serialized
      * @return The JSON String
+     * @throws JsonGenerationException 
+     * @throws IOException 
      */
-    public static String toJson(UserStory inputUserStory) {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(inputUserStory);
+    public static String toJson(UserStory inputUserStory) throws IOException  {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(inputUserStory);
     }
 
     /**
@@ -374,65 +396,58 @@ public class UserStory implements Model {
      * @throws IllegalArgumentsException
      *             if the Json String couldn't be mapped to the object
      */
-    public static UserStory fromJson(String jsonString) throws JsonSyntaxException {
-        Gson demarshaller = new Gson();
-        UserStory userstoryObject = demarshaller.fromJson(jsonString, UserStory.class);
-        if (userstoryObject.containsNull()) {
-            throw new IllegalArgumentException("Json couldn't be mapped to UserStory");
-        } else {
-            return userstoryObject;
-        } 
+    public static UserStory fromJson(String jsonString) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(jsonString, UserStory.class);
     }
 
     /**
      * Creates an JSON Serialization from the calling UserStory object
      * 
      * @return The JSON String
+     * @throws IOException 
+     * @throws JsonGenerationException 
      */
-    public String toJson() {
-        Gson marshaller = new Gson();
-        return marshaller.toJson(this);
+    public String toJson() throws JsonGenerationException, IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(this);
     }
-    
-    //checks if the object contains null vlues (i.e. after demarshalling vom json)
-    private boolean containsNull() {
-        return (title == null || description == null || tasks == null || priority == null);
-    }
-    
-    //checks if the task lists of this and of another UserStory object are equal
+
+    // checks if the task lists of this and of another UserStory object are equal
     private boolean tasksEquals(UserStory comp) {
-        if (this.getNumberOfTasks() != comp.getNumberOfTasks()) {
+        if (this.numberOfTasks() != comp.numberOfTasks()) {
             return false;
-        }
-        else {
-            for (int i = 0; i <= this.getNumberOfTasks()-1; i++) {
-                if (!this.getTask(i).equals(comp.getTask(i))) {
+        } else {
+            for (int i = 0; i <= this.numberOfTasks() - 1; i++) {
+                if (!this.getTaskByIndex(i).equals(comp.getTaskByIndex(i))) {
                     return false;
                 }
             }
             return true;
         }
     }
-    
-    //Model methods
-    
+
+    // Model methods
+
     /**
      * Adds en view Element, that will be notified whenever a property is changed
-     * @param view the view Element
+     * 
+     * @param view
+     *            the view Element
      * @return True if element was added
      */
     @Override
     public boolean registerView(ViewElement view) {
         return registeredViews.add(view);
     }
-    
+
     /**
      * Refresh all registered views
      */
     @Override
     public void notifyViews() {
-        for (ViewElement element: registeredViews) {
+        for (ViewElement element : registeredViews) {
             element.refresh();
         }
-    } 
+    }
 }
