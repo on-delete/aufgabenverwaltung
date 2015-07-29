@@ -1,10 +1,18 @@
 package de.saxsys.gui;
 
+import de.saxsys.server.AddTaskVerticle;
+import de.saxsys.server.InitDatabaseVerticle;
 import de.saxsys.server.Server;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.jdbc.JDBCClient;
+import io.vertx.ext.sql.ResultSet;
+import io.vertx.ext.sql.SQLConnection;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.beans.VetoableChangeListener;
@@ -23,16 +31,12 @@ public class MainApplication extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		/*Erzeugen der Vertx-Umgebung und deployen der einzelnen Verticle*/
 		vertx = Vertx.vertx();
 
-		vertx.deployVerticle(new Server(), res -> {
-			if (res.succeeded()) {
-				System.out.println("Deployment id is: " + res.result());
-				deploymentId = res.result();
-			} else {
-				System.out.println("Deployment failed!");
-			}
-		});
+		vertx.deployVerticle(new Server());
+		vertx.deployVerticle(new AddTaskVerticle());
+		vertx.deployVerticle(new InitDatabaseVerticle());
 
 		//TODO: Erstellen der GUI
 	}
