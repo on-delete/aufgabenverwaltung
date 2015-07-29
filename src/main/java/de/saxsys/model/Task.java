@@ -28,7 +28,7 @@ public class Task implements Model {
     private String description;
     private String inCharge;
 
-    // list vor registerd views
+    // list for registered views
     @JsonIgnore
     private Set<ViewElement> registeredViews;
 
