@@ -32,8 +32,7 @@ public class Task implements Model {
     @JsonIgnore
     private Set<ViewElement> registeredViews;
 
-    public Task() {
-    }
+    private Task() {}
 
     /**
      * Create a Task without description and person in charge

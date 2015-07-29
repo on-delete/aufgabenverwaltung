@@ -30,7 +30,7 @@ public class UserStory implements Model {
     private Set<ViewElement> registeredViews;
     
     //constructo for Jackson, shouldn't be used
-    private UserStory(){};
+    private UserStory(){}
     
     /**
      * Create a UserStory object without tasks and description
