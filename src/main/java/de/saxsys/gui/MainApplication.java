@@ -5,6 +5,7 @@ import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.beans.VetoableChangeListener;
@@ -23,7 +24,7 @@ public class MainApplication extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		vertx = Vertx.vertx();
+		/*vertx = Vertx.vertx();
 
 		vertx.deployVerticle(new Server(), res -> {
 			if (res.succeeded()) {
@@ -32,9 +33,15 @@ public class MainApplication extends Application{
 			} else {
 				System.out.println("Deployment failed!");
 			}
-		});
-
-		//TODO: Erstellen der GUI
+		});*/
+	    	    
+		//GUI
+	    TaskManagementRootPane root = new TaskManagementRootPane();
+	    root.setId("root");
+	    
+	    Scene primaryScene = new Scene(root);
+	    primaryStage.setScene(primaryScene);
+	    primaryStage.show();
 	}
 
 	@Override

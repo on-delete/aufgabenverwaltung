@@ -4,7 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.saxsys.gui.Model;
-import de.saxsys.gui.ViewElement;
+import de.saxsys.gui.ActiveViewElement;
 
 import java.io.IOException;
 
@@ -30,7 +30,7 @@ public class Task implements Model {
 
     // list vor registerd views
     @JsonIgnore
-    private Set<ViewElement> registeredViews;
+    private Set<ActiveViewElement> registeredViews;
 
     private Task() {}
 
@@ -82,7 +82,7 @@ public class Task implements Model {
         setDescription(description);
         setInCharge(inCharge);
         this.status = Status.TODO;
-        this.registeredViews = new HashSet<ViewElement>();
+        this.registeredViews = new HashSet<ActiveViewElement>();
     }
 
     public boolean equals(Task comp) {
@@ -267,7 +267,7 @@ public class Task implements Model {
      * @return True if element was added
      */
     @Override
-    public boolean registerView(ViewElement view) {
+    public boolean registerView(ActiveViewElement view) {
         return registeredViews.add(view);
     }
 
@@ -276,7 +276,7 @@ public class Task implements Model {
      */
     @Override
     public void notifyViews() {
-        for (ViewElement element : registeredViews) {
+        for (ActiveViewElement element : registeredViews) {
             element.refresh();
         }
     }

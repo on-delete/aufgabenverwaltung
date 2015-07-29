@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.ObjectMapper;
 import com.fasterxml.jackson.core.JsonGenerationException;
 
 import de.saxsys.gui.Model;
-import de.saxsys.gui.ViewElement;
+import de.saxsys.gui.ActiveViewElement;
 
 /**
  * Class for storing information about a userstory. Includes userstory title, priority, description (optional) and a
@@ -27,7 +27,7 @@ public class UserStory implements Model {
     private Priority priority;
 
     // list vor registerd views
-    private Set<ViewElement> registeredViews;
+    private Set<ActiveViewElement> registeredViews;
     
     //constructo for Jackson, shouldn't be used
     private UserStory(){}
@@ -88,7 +88,7 @@ public class UserStory implements Model {
      */
     public UserStory(String title, Priority priority, List<Task> tasks, String description) {
         this.tasks = new ArrayList<Task>();
-        this.registeredViews = new HashSet<ViewElement>();
+        this.registeredViews = new HashSet<ActiveViewElement>();
         setTitle(title);
         setPriority(priority);
         addAllTasks(tasks);
@@ -437,7 +437,7 @@ public class UserStory implements Model {
      * @return True if element was added
      */
     @Override
-    public boolean registerView(ViewElement view) {
+    public boolean registerView(ActiveViewElement view) {
         return registeredViews.add(view);
     }
 
@@ -446,7 +446,7 @@ public class UserStory implements Model {
      */
     @Override
     public void notifyViews() {
-        for (ViewElement element : registeredViews) {
+        for (ActiveViewElement element : registeredViews) {
             element.refresh();
         }
     }
