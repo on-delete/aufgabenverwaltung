@@ -58,7 +58,7 @@ public class TaskTests {
     @Test
     public void testStaticToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
+            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\",\"registeredViews\":[]}", Task.toJson(task));
         }
         catch (Exception e) {
             fail();
@@ -68,7 +68,7 @@ public class TaskTests {
     @Test
     public void testToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
+            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\",\"registeredViews\":[]}", task.toJson());
         }
         catch (Exception e) {
             fail();
@@ -77,7 +77,7 @@ public class TaskTests {
     
     @Test
     public void testFromJson() {
-        Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
+        Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\",\"registeredViews\":[]}");
         assertTrue(task.equals(task2));
     }
 }

@@ -1,22 +1,27 @@
 package de.saxsys.model;
 
-import java.io.Serializable;
+
+import java.util.HashSet;
+import java.util.Set;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import de.saxsys.gui.Model;
+import de.saxsys.gui.ViewElement;
 
 /**
  * Class for storing information about a task. Includes task title, priority, description (optional) and name of th
  * person in charge for this task (optional).
  */
-public class Task implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Task implements Model {
 
     private String title;
     private Priority priority;
     private Status status;
     private String description;
     private String inCharge;
+    
+    //list vor registerd views
+    private Set<ViewElement> registeredViews;
 
     /**
      * Create a Task without description and person in charge
@@ -66,6 +71,7 @@ public class Task implements Serializable {
         setDescription(description);
         setInCharge(inCharge);
         this.status = Status.TODO;
+        this.registeredViews = new HashSet<ViewElement>();
     }
 
     public boolean equals(Task comp) {
@@ -240,5 +246,27 @@ public class Task implements Serializable {
         Gson marshaller = new Gson();
         return marshaller.toJson(this);
     }
-
+    
+    
+    //Model methods
+    
+    /**
+     * Adds en view Element, that will be notified whenever a property is changed
+     * @param view the view Element
+     * @return True if element was added
+     */
+    @Override
+    public boolean registerView(ViewElement view) {
+        return registeredViews.add(view);
+    }
+    
+    /**
+     * Refresh all registered views
+     */
+    @Override
+    public void notifyViews() {
+        for (ViewElement element: registeredViews) {
+            element.refresh();
+        }
+    }    
 }
