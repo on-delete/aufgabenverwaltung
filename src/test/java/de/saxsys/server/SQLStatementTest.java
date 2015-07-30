@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import de.saxsys.model.Priority;
+
 /**
  * Created by andre.krause on 30.07.2015.
  */
@@ -55,6 +57,123 @@ public class SQLStatementTest {
 			});
 		});
 	}
+	
+	@Test
+	public void testUpdateUserstory(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("UPDATE userstory SET u_title='manipulated userstory', u_description='manipulated description', t_priority='MIDDLE',);", res2 -> {
+			});
+			
+			connection.query("SELECT * FROM userstory", res1 -> {
+				context.assertEquals("[0,\"manipulated userstory\",\"manipulated description\",\"MIDDLE\"]", res1.result().getResults().get(0).toString());
+				
+				async1.complete();
+			});
+		});
+	}
+	
+	@Test
+	public void testSelectUserstory(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory', 'HIGH');", res21 -> {
+			});
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory', 'MIDDLE');", res22 -> {
+			});
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 3', 'An Userstory', 'LOW');", res23 -> {
+			});
+			
+			connection.query("SELECT userstory.title FROM userstory WHERE title='userstory 1'", res11 -> {
+				context.assertEquals("[0,\"userstory 1\",\"An Uuserstory\",\"HIGH\",\"\"]", res11.result().getResults().get(0).toString());
+				
+			connection.query("SELECT userstory.prority FROM userstory WHERE priority='LOW'", res12 -> {
+				context.assertEquals("[0,\"userstory 3\",\"An Userstory\",\"LOW\",\"\"]", res12.result().getResults().get(0).toString());
+					
+				async1.complete();
+			});
+		});});
+	}
+	
+	@Test
+	public void testInsertTask(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', );", res2 -> {
+			});
+			
+			connection.query("SELECT * FROM task", res1 -> {
+				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res1.result().getResults().get(0).toString());
+				
+				async1.complete();
+			});
+		});
+	}
+	
+	@Test
+	public void testUpdateTask(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("UPDATE task SET t_title='manipulated task', t_description='manipulated description', t_priority='MIDDLE', t_inCharge='', );", res2 -> {
+			});
+		
+			connection.query("SELECT * FROM task", res1 -> {
+				context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE	\",\"\"]", res1.result().getResults().get(0).toString());
+				
+				async1.complete();
+			});
+		});
+	}
+	
+	@Test
+	public void testSelectTask(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', );", res21 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 2', 'An other task', 'MIDDLE', '', );", res22 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 3', 'An other task, too', 'LOW', '', );", res23 -> {
+			});
+			
+			connection.query("SELECT task.title FROM task WHERE title='task 1'", res11 -> {
+				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res11.result().getResults().get(0).toString());
+				
+			connection.query("SELECT task.prority FROM task WHERE priority='LOW'", res12 -> {
+				context.assertEquals("[0,\"task 3\",\"An other task, too\",\"LOW\",\"\"]", res12.result().getResults().get(0).toString());
+					
+				async1.complete();
+			});
+		});});
+	}
+	
+	
+	
 
 	private void initDatabase(SQLConnection conn){
 		conn.execute("create sequence u_id_squence", voidAsyncResult -> {
@@ -71,4 +190,27 @@ public class SQLStatementTest {
 			}
 		});
 	}
+	
+	
+	/*
+	@Test
+	public void testInsertTask2(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+		
+		SQLStatement test = new SQLStatement();
+		test.InsertTask("task1", "A task", Priority.HIGH, "");
+		
+		connection.query("SELECT * FROM task", res1 -> {
+			context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res1.result().getResults().get(0).toString());
+			
+			async1.complete();
+		});
+		});
+	}
+	*/
 }
