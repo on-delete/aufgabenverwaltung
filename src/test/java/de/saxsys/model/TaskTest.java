@@ -80,14 +80,9 @@ public class TaskTest {
     }
     
     @Test
-    public void testFromJson() {
-        try {
+    public void testFromJson() throws IOException{
             Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
             assertTrue(task.equals(task2));
-        }
-        catch(Exception e){
-            fail();
-        }
     }
 
     @Test(expected = IOException.class)

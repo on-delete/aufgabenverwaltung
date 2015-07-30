@@ -32,7 +32,9 @@ public class Task implements Model {
     @JsonIgnore
     private Set<ActiveViewElement> registeredViews;
 
-    private Task() {}
+    private Task() {
+        this.registeredViews = new HashSet<ActiveViewElement>();
+    }
 
     /**
      * Create a Task without description and person in charge
@@ -77,12 +79,12 @@ public class Task implements Model {
      *             If priority is 0
      */
     public Task(String title, Priority priority, String description, String inCharge) {
+        this.registeredViews = new HashSet<ActiveViewElement>();
         setTitle(title);
         setPriority(priority);
         setDescription(description);
         setInCharge(inCharge);
         this.status = Status.TODO;
-        this.registeredViews = new HashSet<ActiveViewElement>();
     }
 
     public boolean equals(Task comp) {
@@ -107,6 +109,7 @@ public class Task implements Model {
     public void setTitle(String title) {
         if (title != null) {
             this.title = title;
+            notifyViews();
         } else {
             throw new IllegalArgumentException("Title musn't be null");
         }
@@ -121,38 +124,33 @@ public class Task implements Model {
     public void setPriority(Priority priority) {
         if (priority != null) {
             this.priority = priority;
+            notifyViews();
         } else {
             this.priority = Priority.MIDDLE;
         }
     }
 
     /**
-     * Set a new task status in the Task object
-     * 
-     * @param status
-     *            new status for the Task object; Default: TODO
+     * Increase task status in the Task object
      */
     public boolean increaseStatus() {
-        if (getStatus().equals(Status.TODO)) {
-            this.status = Status.IN_PROGRESS;
+        if (this.status.ordinal() < Status.values().length-1) {
+            this.status = Status.values()[this.status.ordinal()+1];
+            notifyViews();
             return true;
-        } else if (getStatus().equals(Status.IN_PROGRESS)) {
-            this.status = Status.DONE;
-            return true;
-        } else {
+        }
+        else {
             return false;
         }
     }
 
     /**
-     * Set a new task description in the Task object
-     * 
-     * @param description
-     *            new description for the Task object
+     * Increase task status in the Task object
      */
     public void setDescription(String description) {
         if (description != null) {
             this.description = description;
+            notifyViews();
         } else {
             this.description = "";
         }
@@ -167,6 +165,7 @@ public class Task implements Model {
     public void setInCharge(String inCharge) {
         if (inCharge != null) {
             this.inCharge = inCharge;
+            notifyViews();
         } else {
             this.inCharge = "";
         }
@@ -235,8 +234,6 @@ public class Task implements Model {
      * @param jsonString
      *            The JSON serialization to be nmarshalled
      * @return The created Task object
-     * @throws JsonMappingException
-     *             if the parsed data couldn't be mapped to the object
      * @throws JsonParseException
      *             if the data couldn't be parsed
      * @throws IOException
