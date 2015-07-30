@@ -9,10 +9,8 @@ import javafx.geometry.HPos;
 import javafx.scene.layout.Pane;
 
 public class TaskManagementContentPane extends GridPane {
-    ReadOnlyDoubleProperty topWidth;
-    public TaskManagementContentPane(ReadOnlyDoubleProperty topWidth) {
 
-        this.topWidth = topWidth;
+    public TaskManagementContentPane(ReadOnlyDoubleProperty topWidth) {
 
         Text title = new Text("Task Management");
         title.setId("title");

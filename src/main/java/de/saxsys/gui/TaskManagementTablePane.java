@@ -24,11 +24,12 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     private DoubleBinding columnWidth;
 
     public TaskManagementTablePane(ReadOnlyDoubleProperty topWidth) {
+
         GlobalController controller = new GlobalMockController();
         globalModelInstance = controller.getGlobalModelInstance();
         globalModelInstance.registerView(this);
 
-        columnWidth = topWidth.divide(RowTitles.ROW_TITLES.size());
+        columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the top panes (including space for margin)
 
         setHeadings();
         setUserstories();
