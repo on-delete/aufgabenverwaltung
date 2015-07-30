@@ -1,59 +1,57 @@
 package de.saxsys.gui;
 
+import de.saxsys.model.*;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
+import javafx.beans.binding.DoubleBinding;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.scene.Node;
 
-public class TaskManagementTablePane extends GridPane {
-    public TaskManagementTablePane() {
-        setHeadings();        
-        initLogic();
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class TaskManagementTablePane extends VBox implements ActiveViewElement {
+    private UserStoryList globalModelInstance;
+
+    private DoubleBinding columnWidth;
+
+    public TaskManagementTablePane(ReadOnlyDoubleProperty topWidth) {
+        GlobalController controller = new GlobalMockController();
+        globalModelInstance = controller.getGlobalModelInstance();
+        globalModelInstance.registerView(this);
+
+        columnWidth = topWidth.divide(RowTitles.ROW_TITLES.size());
+
+        setHeadings();
+        setUserstories();
     }
 
     private void setHeadings() {
-        int columnNumber = 0;
-        
-        for (RowTitles title: RowTitles.values()) {
-            getColumnConstraints().add(new ColumnConstraints(1500/RowTitles.values().length));
-            
-            Text rowTitle = new Text(title.getTitle());
-            GridPane.setHalignment(rowTitle, HPos.CENTER);
-            rowTitle.setId(title.getTitle() + "_text");
-            
-            add(rowTitle, columnNumber, 0);
-            
-            columnNumber++;
-        }
-    }
-    
-    /*
-    private void initLogic() {
-        TaskManagementUserStoryViewContainer userStoryView = new TaskManagementUserStoryViewContainer();
-        
+        TaskManagementHeadingView headings = new TaskManagementHeadingView(columnWidth);
+        headings.setId("headings");
 
-        int rowNumber = getNumberOfRows()+1;
-        
-        TaskManagerTaskListView todoView = userStoryView.getTodoView();
-        todoView.setId("todo_view");
-        TaskManagerTaskListView inProgressView = userStoryView.getInProgressView();
-        todoView.setId("in_progress_view");
-        TaskManagerTaskListView doneView = userStoryView.getDoneView();
-        todoView.setId("done_view");
-        
-        add(todoView, 0, rowNumber);
-        add(inProgressView, 1, rowNumber);
-        add(doneView, 2, rowNumber);
-        
+        getChildren().add(headings);
     }
-    
-    */
-    public int getMaxRowNumber(){
-        int numberOfRows = 0;
-        for (Node element : getChildren()) {
-            numberOfRows = Math.max(numberOfRows, getRowIndex(element));
+
+    private void setUserstories() {
+        for (UserStory story : globalModelInstance.getUserStories()) {
+            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth);
+            view.setId(story.getTitle() + "_story");
+
+            getChildren().add(view);
         }
-        return numberOfRows;
+    }
+
+    @Override
+    public void refresh() {
+        setUserstories();
     }
 }

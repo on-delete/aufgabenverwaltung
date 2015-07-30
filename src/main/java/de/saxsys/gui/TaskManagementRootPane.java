@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 
 public class TaskManagementRootPane extends BorderPane {
     public TaskManagementRootPane() {
-       Pane contentPane = new TaskManagementContentPane();
+       Pane contentPane = new TaskManagementContentPane(widthProperty());
        contentPane.setPadding(new Insets(20.0, 50.0, 50.0, 50.0));
        contentPane.setId("content");
        setCenter(contentPane);

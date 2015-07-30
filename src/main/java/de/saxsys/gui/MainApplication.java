@@ -1,6 +1,6 @@
 package de.saxsys.gui;
 
-import de.saxsys.server.AddTaskVerticle;
+//import de.saxsys.server.AddTaskVerticle;
 import de.saxsys.server.InitDatabaseVerticle;
 import de.saxsys.server.Server;
 import io.vertx.core.Handler;
@@ -31,12 +31,12 @@ public class MainApplication extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-
+/*
         vertx = Vertx.vertx();
         
         vertx.deployVerticle(new Server());
         vertx.deployVerticle(new AddTaskVerticle());
-        vertx.deployVerticle(new InitDatabaseVerticle());
+        vertx.deployVerticle(new InitDatabaseVerticle());*/
         
 		//GUI
 	    TaskManagementRootPane root = new TaskManagementRootPane();
@@ -44,6 +44,7 @@ public class MainApplication extends Application{
 	    
 	    Scene primaryScene = new Scene(root);
 	    primaryStage.setScene(primaryScene);
+		primaryStage.setTitle("Task Management");
 	    primaryStage.show();
 
 

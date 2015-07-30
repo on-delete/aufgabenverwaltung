@@ -1,15 +1,19 @@
 package de.saxsys.gui;
 
-public enum RowTitles {
-    TODO("Todo"), IN_RROGRESS("InProgress"), DONE("Done");
-    
-    private String title;
-    
-    private RowTitles(String title){
-        this.title = title;
-    }
-    
-    public String getTitle() {
-        return this.title;
+import de.saxsys.model.Status;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+public class RowTitles {
+   public static Map<Status, String> ROW_TITLES;
+    static {
+        Map<Status, String> tempMap = new HashMap<>();
+        tempMap.put(Status.TODO, "Todo");
+        tempMap.put(Status.IN_PROGRESS, "InProgress");
+        tempMap.put(Status.DONE, "Done");
+
+        ROW_TITLES = Collections.unmodifiableMap(tempMap);
     }
 }
