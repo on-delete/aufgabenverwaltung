@@ -8,6 +8,9 @@ import io.vertx.ext.sql.SQLConnection;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+
+import java.util.concurrent.TimeoutException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +41,9 @@ public class SQLStatementTest {
 	public void tearDown(TestContext context) {
 		client.close();
 	}
-
+	
+	
+	//u_id; u_title; u_description; u_prority; u_order
 	@Test
 	public void testInsertUserstory(TestContext context) {
 		Async async1 = context.async();
@@ -47,11 +52,11 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 
-			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 1', '', 'HIGH');", res2 -> {
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', '', 'HIGH', 0,);", res2 -> {
 			});
 
 			connection.query("SELECT * FROM userstory", res1 -> {
-				context.assertEquals("[0,\"userstory 1\",\"\",\"HIGH\"]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"userstory 1\",\"\",\"HIGH\",\"0\"]", res1.result().getResults().get(0).toString());
 
 				async1.complete();
 			});
@@ -59,7 +64,7 @@ public class SQLStatementTest {
 	}
 	
 	@Test
-	public void testUpdateUserstory(TestContext context)
+	public void testUpdateUserstory(TestContext context) throws TimeoutException
 	{
 		Async async1 = context.async();
 		
@@ -67,11 +72,14 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			connection.execute("UPDATE userstory SET u_title='manipulated userstory', u_description='manipulated description', t_priority='MIDDLE',);", res2 -> {
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', '', 'HIGH', 0,);", res2 -> {
 			});
+			connection.execute("UPDATE userstory SET u_title='manipulated userstory', u_description='manipulated description', u_priority='MIDDLE', );", res2 -> {
+			System.out.println(res2);});
+			
 			
 			connection.query("SELECT * FROM userstory", res1 -> {
-				context.assertEquals("[0,\"manipulated userstory\",\"manipulated description\",\"MIDDLE\"]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"manipulated userstory\",\"manipulated description\",\"MIDDLE\",\"0\"]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -87,24 +95,25 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory', 'HIGH');", res21 -> {
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory', 'HIGH', 0);", res21 -> {
 			});
-			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory', 'MIDDLE');", res22 -> {
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory', 'MIDDLE', 1);", res22 -> {
 			});
-			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 3', 'An Userstory', 'LOW');", res23 -> {
+			connection.execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 3', 'An Userstory', 'LOW', 2);", res23 -> {
 			});
 			
 			connection.query("SELECT userstory.title FROM userstory WHERE title='userstory 1'", res11 -> {
-				context.assertEquals("[0,\"userstory 1\",\"An Uuserstory\",\"HIGH\",\"\"]", res11.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"userstory 1\",\"An Userstory\",\"HIGH\",\"0\"]", res11.result().getResults().get(0).toString());
 				
 			connection.query("SELECT userstory.prority FROM userstory WHERE priority='LOW'", res12 -> {
-				context.assertEquals("[0,\"userstory 3\",\"An Userstory\",\"LOW\",\"\"]", res12.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"userstory 3\",\"An Userstory\",\"LOW\",\"2\"]", res12.result().getResults().get(2).toString());
 					
 				async1.complete();
 			});
 		});});
 	}
 	
+	//t_id; t_title; t_description; t_priority; t_inCharge; t_order
 	@Test
 	public void testInsertTask(TestContext context)
 	{
@@ -114,11 +123,11 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', );", res2 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, );", res2 -> {
 			});
 			
 			connection.query("SELECT * FROM task", res1 -> {
-				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\",\"0\"]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -138,7 +147,7 @@ public class SQLStatementTest {
 			});
 		
 			connection.query("SELECT * FROM task", res1 -> {
-				context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE	\",\"\"]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE\",\"\",\"0\"]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -154,18 +163,18 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', );", res21 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, );", res21 -> {
 			});
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 2', 'An other task', 'MIDDLE', '', );", res22 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 2', 'An other task', 'MIDDLE', '', 1, );", res22 -> {
 			});
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 3', 'An other task, too', 'LOW', '', );", res23 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 3', 'An other task, too', 'LOW', '', 2, );", res23 -> {
 			});
 			
 			connection.query("SELECT task.title FROM task WHERE title='task 1'", res11 -> {
-				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res11.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\",\"0\"]", res11.result().getResults().get(0).toString());
 				
 			connection.query("SELECT task.prority FROM task WHERE priority='LOW'", res12 -> {
-				context.assertEquals("[0,\"task 3\",\"An other task, too\",\"LOW\",\"\"]", res12.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"task 3\",\"An other task, too\",\"LOW\",\"\",\"2\"]", res12.result().getResults().get(0).toString());
 					
 				async1.complete();
 			});
