@@ -18,9 +18,10 @@ import io.vertx.ext.web.handler.BodyHandler;
 public class Server extends AbstractVerticle{
 
 	private Router router;
-	private EventBus eventBus = vertx.eventBus();
+	private EventBus eventBus;
 
 	public void start(){
+		eventBus = vertx.eventBus();
 		HttpServer server = vertx.createHttpServer();
 
 		router = Router.router(vertx);
@@ -44,7 +45,7 @@ public class Server extends AbstractVerticle{
 			String taskid = routingContext.request().getParam("taskid");
 			eventBus.send("deleteTask", taskid, result -> sendResponseWithoutBody(result, routingContext));
 		});
-		router.route(HttpMethod.GET, "/epicservice/gettask/:taskid").handler(routingContext -> {
+		router.route(HttpMethod.GET, "/epicservice/getTask/:taskid").handler(routingContext -> {
 			String taskid = routingContext.request().getParam("taskid");
 			eventBus.send("getTask", taskid, result -> sendResponseWithBody(result, routingContext));
 		});
@@ -61,15 +62,15 @@ public class Server extends AbstractVerticle{
 			String userstoryid = routingContext.request().getParam("userstoryid");
 			eventBus.send("deleteUserstory", userstoryid, result -> sendResponseWithoutBody(result, routingContext));
 		});
-		router.route(HttpMethod.GET, "/epicservice/getuserstory/:userstoryid").handler(routingContext -> {
+		router.route(HttpMethod.GET, "/epicservice/getUserstory/:userstoryid").handler(routingContext -> {
 			String userstoryid = routingContext.request().getParam("userstoryid");
 			eventBus.send("getUserstory", userstoryid, result -> sendResponseWithBody(result, routingContext));
 		});
-		router.route(HttpMethod.GET, "/epicservice/getuserstorywithtasks/:userstoryid").handler(routingContext -> {
+		router.route(HttpMethod.GET, "/epicservice/getUserstoryWithTasks/:userstoryid").handler(routingContext -> {
 			String userstoryid = routingContext.request().getParam("userstoryid");
 			eventBus.send("getUserstoryWithTasks", userstoryid, result -> sendResponseWithBody(result, routingContext));
 		});
-		router.route(HttpMethod.GET, "/epicservice/getalluserstorieswithtasks").handler(routingContext -> {
+		router.route(HttpMethod.GET, "/epicservice/getAllUserstoriesWithTasks").handler(routingContext -> {
 			eventBus.send("getAllUserstoriesWithTasks", "", result -> sendResponseWithBody(result, routingContext));
 		});
 	}
@@ -87,13 +88,13 @@ public class Server extends AbstractVerticle{
 	}
 
 	private void sendResponseWithBody(AsyncResult<Message<Object>> result, RoutingContext routingContext){
-		String resultBody = result.result().body().toString();
 		HttpServerResponse response = routingContext.response();
 		if (result.failed()) {
 			response.putHeader("content-type", "text/plain");
 			response.setStatusCode(500);
 			response.end("Internal Error!");
 		} else {
+			String resultBody = result.result().body().toString();
 			response.putHeader("content-type", "application/json");
 			response.setStatusCode(200);
 			response.end(resultBody);
