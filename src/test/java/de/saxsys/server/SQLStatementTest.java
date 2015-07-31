@@ -7,6 +7,13 @@ import io.vertx.ext.sql.SQLConnection;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
+
+
+import java.util.concurrent.TimeoutException;
+
+import org.apache.derby.tools.sysinfo;
+import org.apache.derby.vti.AwareVTI;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -36,6 +43,15 @@ public class SQLStatementTest {
 		client.close();
 	}
 	
+	@After
+	public void tearDown2(TestContext context) {
+		vertx.close(context.asyncAssertSuccess());
+	}
+	
+	
+/*
+ * Alle Tests funktionieren EINZELN, aber nicht, wenn alle Tests auf einmal ausgeführt werden.
+ */
 	
 	//u_id; u_title; u_description; u_prority; u_order
 	@Test
@@ -75,6 +91,9 @@ public class SQLStatementTest {
 				
 				async1.complete();
 			});
+			
+			connection.execute("DELETE * FROM userstory", res6 -> {
+			});
 		});
 	}
 	
@@ -109,7 +128,57 @@ public class SQLStatementTest {
 		});
 	}
 	
-	/////////////////// Stand 30. Juli: Alles funktioniert, bloß nicht "res1.result().getResults().get(0).toString());"
+	@Test
+	public void testSelectAllUserstories(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'First', 	'HIGH', 	0);", res21 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'Second',	'MIDDLE', 	1);", res22 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 3', 'Third', 	'LOW', 		2);", res23 -> {
+			});
+			
+			connection.query("SELECT * FROM userstory", res1 -> {
+				context.assertEquals("[[0,\"userstory 1\",\"First\",\"HIGH\",0], [1,\"userstory 2\",\"Second\",\"MIDDLE\",1], [2,\"userstory 3\",\"Third\",\"LOW\",2]]", res1.result().getResults().toString());
+				
+				async1.complete();
+			});
+		});	
+	}
+	
+	@Test
+	
+	public void testDeleteUserstory(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'First', 	'HIGH', 	0);", res21 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'Second',	'MIDDLE', 	1);", res22 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 3', 'Third', 	'LOW', 		2);", res23 -> {
+			});
+			
+			connection.execute("DELETE FROM userstory WHERE u_title='userstory 1';", res24 -> {
+			});
+			
+			connection.query("SELECT * FROM userstory", res1 -> {
+				context.assertEquals("[[1,\"userstory 2\",\"Second\",\"MIDDLE\",1], [2,\"userstory 3\",\"Third\",\"LOW\",2]]", res1.result().getResults().toString());
+				
+				async1.complete();
+			});
+		});
+	}
 	
 	//t_id; t_title; t_description; t_priority; t_inCharge; t_order; u_id
 	@Test
@@ -121,30 +190,23 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			// Die Userstories erzeuge ich, damit ich bei den Tasks eine u_id angeben kann.
-			// Weil ich nicht weiß, ob die IDs bei 0 oder 1 anfangen, generiere ich zwei Userstories und nehme einfach "1".
-			// Damit bin ich auf der sicheren Seite.
+			connection.execute("DELETE * FROM task", res3 -> {
+			});
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory0', 'HIGH', 	0);", res21 -> {
 			});
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res22 -> {
 			});
 			
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1", res2 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1);", res2 -> {
 			});
 			
 			connection.query("SELECT * FROM task", res1 -> {
-				context.assertFalse(res1.result().getResults().isEmpty());
-				
-				//Q: Warum ist getResults() leer?
-				//context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\",0,1]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\",0,1]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
 		});
 	}
-	
-	
-	
 	
 	@Test
 	public void testUpdateTask(TestContext context)
@@ -160,14 +222,13 @@ public class SQLStatementTest {
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res22 -> {
 			});
 			
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1", res2 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1);", res2 -> {
 			});
-			connection.execute("UPDATE task SET t_title='manipulated task', t_description='manipulated description', t_priority='MIDDLE', t_inCharge='');", res2 -> {
+			connection.execute("UPDATE task SET t_title='manipulated task', t_description='manipulated description', t_priority='MIDDLE', t_inCharge='';", res2 -> {
 			});
 		
 			connection.query("SELECT * FROM task", res1 -> {
-				System.out.println(res1.result().getResults().get(0).toString());
-		//		context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE\",\"\",0,1]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE\",\"\",0,1]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -198,7 +259,7 @@ public class SQLStatementTest {
 			connection.query("SELECT task.t_title FROM task WHERE t_title='task 1'", res11 -> {
 				context.assertEquals("[\"task 1\"]", res11.result().getResults().get(0).toString());
 			});	
-			connection.query("SELECT task.t_prority FROM task WHERE t_priority='LOW'", res12 -> {
+			connection.query("SELECT task.t_priority FROM task WHERE t_priority='LOW'", res12 -> {
 				context.assertEquals("[\"LOW\"]", res12.result().getResults().get(0).toString());
 					
 				async1.complete();
@@ -206,11 +267,75 @@ public class SQLStatementTest {
 		});
 	}
 	
-	/*
-	 * Zum Abschluss nochmal eine Zusammenfassung:
-	 * Alle Userstory-Tests funktionieren, die ganzen Task-Tests wiederum nicht, weil wohl die getResults()-Methode leer ist.
-	 */
+	@Test
+	public void testDeleteTask(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory0', 'HIGH', 	0);", res21 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res22 -> {
+			});
+			
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task1', 'HIGH', '', 0, 1);", res2 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 2', 'A task2', 'MIDDLE', '', 0, 1);", res2 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 3', 'A task3', 'LOW', '', 0, 1);", res2 -> {
+			});
+			
+			connection.execute("DELETE FROM task WHERE t_title='task 1';", res24 -> {
+			});
+			
+			connection.query("SELECT * FROM task", res1 -> {
+				System.out.println(res1.result().getResults().toString());
+				context.assertEquals("[[1,\"task 2\",\"A task2\",\"MIDDLE\",\"\",0,1], [2,\"task 3\",\"A task3\",\"LOW\",\"\",0,1]]", res1.result().getResults().toString());
+				
+				async1.complete();
+			});
+		});
+	}
 	
+	@Test
+	public void testSelectAllTasksOfOneUserstory(TestContext context)
+	{
+		Async async1 = context.async();
+		
+		client.getConnection(res -> {
+			SQLConnection connection = res.result();
+			initDatabase(connection);
+			
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory0', 'HIGH', 	0);", res211 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res212 -> {
+			});
+			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 3', 'An Userstory2', 'MIDDLE', 2);", res212 -> {
+			});
+		
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task1', 'HIGH', 		'', 0, 1);", res221 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 2', 'A task2', 'MIDDLE', 	'', 0, 1);", res222 -> {
+			});
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 3', 'A task3', 'LOW', 		'', 0, 2);", res223 -> {
+			});
+			
+			connection.query("SELECT * FROM task WHERE u_id=1", res11 -> {
+				context.assertEquals("[[0,\"task 1\",\"A task1\",\"HIGH\",\"\",0,1], [1,\"task 2\",\"A task2\",\"MIDDLE\",\"\",0,1]]", res11.result().getResults().toString());
+			});	
+			connection.query("SELECT * FROM task WHERE u_id=2", res12 -> {
+				context.assertEquals("[[2,\"task 3\",\"A task3\",\"LOW\",\"\",0,2]]", res12.result().getResults().toString());
+			
+				async1.complete();
+			});
+			
+			connection.execute("DELETE * FROM userstory", res6 -> {
+			});
+		});
+	}
 	
 
 	private void initDatabase(SQLConnection conn){
@@ -228,27 +353,4 @@ public class SQLStatementTest {
 			}
 		});
 	}
-	
-	
-	/*
-	@Test
-	public void testInsertTask2(TestContext context)
-	{
-		Async async1 = context.async();
-		
-		client.getConnection(res -> {
-			SQLConnection connection = res.result();
-			initDatabase(connection);
-		
-		SQLStatement test = new SQLStatement();
-		test.InsertTask("task1", "A task", Priority.HIGH, "");
-		
-		connection.query("SELECT * FROM task", res1 -> {
-			context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\"]", res1.result().getResults().get(0).toString());
-			
-			async1.complete();
-		});
-		});
-	}
-	*/
 }
