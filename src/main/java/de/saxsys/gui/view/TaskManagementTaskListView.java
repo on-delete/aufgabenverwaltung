@@ -4,10 +4,11 @@ import de.saxsys.model.Task;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class TaskManagementTaskListView extends ListView<HBox> {
+public class TaskManagementTaskListView extends ListView<VBox> {
     DoubleBinding listWidth;
     List<Task> tasks;
 

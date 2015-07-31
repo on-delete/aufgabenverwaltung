@@ -10,12 +10,13 @@ public class TaskManagementContentPane extends GridPane {
 
     public TaskManagementContentPane(ReadOnlyDoubleProperty topWidth) {
 
+        //write the title of the application
         Text title = new Text("Task Management");
         title.setId("title");
         GridPane.setHalignment(title, HPos.LEFT);
 
 
-        Pane table = new TaskManagementTablePane(topWidth);
+        Pane table = new TaskManagementTablePane(topWidth); //create the task table pane and hand down the global window width
         table.setId("table");
 
         add(title, 0, 0, 3, 1);

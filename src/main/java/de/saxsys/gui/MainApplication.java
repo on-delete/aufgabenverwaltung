@@ -31,7 +31,7 @@ public class MainApplication extends Application{
         vertx.deployVerticle(new InitDatabaseVerticle());*/
         
 		//GUI
-	    TaskManagementRootPane root = new TaskManagementRootPane();
+	    TaskManagementRootPane root = new TaskManagementRootPane(); //create the top pane of the application
 	    root.setId("root");
 	    
 	    Scene primaryScene = new Scene(root);

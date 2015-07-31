@@ -16,22 +16,24 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
 
     public TaskManagementUserStoryView(UserStory modelStory, DoubleBinding columnWith) {
         this.modelStory = modelStory;
+        //register to assigned UserStory model
         modelStory.registerView(this);
 
         this.columnWith = columnWith;
 
+        //build view
         setTasksLists();
     }
 
     public void setTasksLists() {
-        getChildren().clear();
-
         for (Status status : Status.values()) {
             if (status.ordinal() == 0) {
-                TaskManagerTitledTaskListView titledTaskListView = new TaskManagerTitledTaskListView(modelStory, getTaskListByStatus(status), columnWith);
+                //adds a view element with userstory title and tasks of the column if its the first column
+                TaskManagementTitledTaskListView titledTaskListView = new TaskManagementTitledTaskListView(modelStory, getTaskListByStatus(status), columnWith);
                 titledTaskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "titled_view");
                 getChildren().add(titledTaskListView);
             } else {
+                //otherwise add an view element which only contains the tasks of the column
                 TaskManagementTaskListView taskListView = new TaskManagementTaskListView((getTaskListByStatus(status)), columnWith);
                 taskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "_view");
                 getChildren().add(taskListView);
@@ -49,6 +51,7 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
 
     @Override
     public void refresh() {
+        getChildren().clear();
         setTasksLists();
     }
 }

@@ -16,19 +16,21 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
     public TaskManagementTablePane(ReadOnlyDoubleProperty topWidth) {
 
+        //create a global controller and get the global model instance
         GlobalController controller = new GlobalMockController();
         globalModelInstance = controller.getGlobalModelInstance();
         globalModelInstance.registerView(this);
 
-        columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the top panes (including space for margin)
+        columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
 
+        //building view
         setHeadings();
         setUserstories();
         setAddButton();
     }
 
     private void setHeadings() {
-        TaskManagementHeadingView headings = new TaskManagementHeadingView(columnWidth);
+        TaskManagementHeadingView headings = new TaskManagementHeadingView(columnWidth); //create a heading view element and hand down the width of each column
         headings.setId("headings");
 
         getChildren().add(headings);
@@ -36,7 +38,7 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
     private void setUserstories() {
         for (UserStory story : globalModelInstance.getUserStories()) {
-            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth);
+            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth); //create a userstory view element and hand down the width of each column
             view.setId(story.getTitle() + "_story");
 
             getChildren().add(view);
@@ -51,6 +53,9 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
     @Override
     public void refresh() {
+        getChildren().clear();
+        setHeadings();
         setUserstories();
+        setAddButton();
     }
 }

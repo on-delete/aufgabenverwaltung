@@ -8,12 +8,12 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class TaskManagerTitledTaskListView extends VBox {
+public class TaskManagementTitledTaskListView extends VBox {
     DoubleBinding listWidth;
     List<Task> tasks;
     UserStory story;
 
-    public TaskManagerTitledTaskListView(UserStory story, List<Task> tasks, DoubleBinding listWidth) {
+    public TaskManagementTitledTaskListView(UserStory story, List<Task> tasks, DoubleBinding listWidth) {
         this.listWidth = listWidth;
         this.setPrefWidth(listWidth.get());
         this.listWidth.addListener((e) -> {
@@ -24,12 +24,13 @@ public class TaskManagerTitledTaskListView extends VBox {
 
         this.story = story;
 
+        //build view
         setUserstory();
         setTasks();
     }
 
     private void setUserstory() {
-        TaskManagerUserStoryTitleView userStoryTitleView = new TaskManagerUserStoryTitleView(story);
+        TaskManagementUserStoryTitleView userStoryTitleView = new TaskManagementUserStoryTitleView(story);
         userStoryTitleView.setId(story.getTitle() + "_title_view");
         getChildren().add(userStoryTitleView);
     }
