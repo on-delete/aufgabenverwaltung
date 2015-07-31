@@ -6,7 +6,7 @@ public interface Model {
      * @param view the view Element
      * @return True if element was added
      */
-    public boolean registerView(ViewElement view);
+    public boolean registerView(ActiveViewElement view);
     
     /**
      * Notify all registered views, if elements changed
