@@ -72,7 +72,7 @@ public class UserStoryListTest {
 		test.addUserStory(myUserStory1);
 		test.addUserStory(myUserStory2);
 		
-		assertEquals(test.numberOfUserStories(), 2);
+		assertEquals(test.getUserStories().size(), 2);
 
 	}
 	

@@ -91,7 +91,8 @@ public class Task implements Model {
         if (this == comp) {
             return true;
         } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
-                && this.getDescription().equals(comp.getDescription()) && this.getInCharge().equals(comp.getInCharge())) {
+                && this.getDescription().equals(comp.getDescription()) && this.getInCharge().equals(comp.getInCharge())
+                && this.getStatus().equals(comp.getStatus())) {
             return true;
         } else {
             return false;

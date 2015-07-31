@@ -16,7 +16,7 @@ public class UserStoryTest {
 
     @Before
     public void before() {
-        List<Task> tasks = new ArrayList<Task>();
+        List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Task1", Priority.HIGH));
         tasks.add(new Task("Task2", Priority.HIGH));
         tasks.add(new Task("Task3", Priority.MIDDLE));
@@ -76,7 +76,7 @@ public class UserStoryTest {
     
     @Test
     public void testAddAllTasks() {
-        List<Task> tasks = new ArrayList<Task>();
+        List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Task3", Priority.MIDDLE));  //adding task that allready exists
         tasks.add(new Task("Task6", Priority.LOW)); //adding new task
         tasks.add(new Task("Task7", Priority.VERY_LOW)); //adding new task
@@ -131,8 +131,8 @@ public class UserStoryTest {
         assertFalse(userstory.moveTaskUp("Task1"));
         assertTrue(userstory.moveTaskUp("Task5"));
         
-        assertEquals("Task5", userstory.getTaskByIndex(3).getTitle());
-        assertEquals("Task4", userstory.getTaskByIndex(4).getTitle());
+        assertEquals("Task5", userstory.getTasks().get(3).getTitle());
+        assertEquals("Task4", userstory.getTasks().get(4).getTitle());
     }
     
     @Test
@@ -140,13 +140,13 @@ public class UserStoryTest {
         assertFalse(userstory.moveTaskDown("Task5"));
         assertTrue(userstory.moveTaskDown("Task4"));
         
-        assertEquals("Task4", userstory.getTaskByIndex(4).getTitle());
-        assertEquals("Task5", userstory.getTaskByIndex(3).getTitle());
+        assertEquals("Task4", userstory.getTasks().get(4).getTitle());
+        assertEquals("Task5", userstory.getTasks().get(3).getTitle());
     }
     
     @Test
-    public void testEquals() {
-        List<Task> tasks = new ArrayList<Task>();
+    public void testEquals() throws IOException{
+        List<Task> tasks = new ArrayList<>();
         tasks.add(new Task("Task1", Priority.HIGH));
         tasks.add(new Task("Task2", Priority.HIGH));
         tasks.add(new Task("Task3", Priority.MIDDLE));
@@ -156,6 +156,7 @@ public class UserStoryTest {
         assertFalse(userstory.equals(userstory2));
         
         userstory2.addTask(new Task("Task5", Priority.VERY_LOW));
+
         assertTrue(userstory.equals(userstory2));
         
         userstory2.setTitle("Story2");
