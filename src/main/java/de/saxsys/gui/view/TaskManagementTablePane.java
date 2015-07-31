@@ -1,5 +1,6 @@
 package de.saxsys.gui.view;
 
+import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.gui.controller.GlobalController;
 import de.saxsys.gui.controller.GlobalMockController;
 import de.saxsys.model.UserStory;
@@ -37,8 +38,10 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     }
 
     private void setUserstories() {
+        //create an Expandable controller which is used in every Expandable Element in the application (gets handed down through the hierarchie)
+        ExpendableController expansionController = new ExpendableController();
         for (UserStory story : globalModelInstance.getUserStories()) {
-            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth); //create a userstory view element and hand down the width of each column
+            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth, expansionController); //create a userstory view element and hand down the width of each column
             view.setId(story.getTitle() + "_story");
 
             getChildren().add(view);

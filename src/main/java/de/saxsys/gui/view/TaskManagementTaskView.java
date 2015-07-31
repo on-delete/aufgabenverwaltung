@@ -1,6 +1,8 @@
 package de.saxsys.gui.view;
 
+import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.model.Task;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.GridPane;
@@ -8,13 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-import javax.swing.event.HyperlinkEvent;
-
-public class TaskManagementTaskView extends VBox implements ActiveViewElement {
+public class TaskManagementTaskView extends VBox implements ActiveViewElement, Expandable {
     Task task;
+    ExpendableController expansionController;
 
-    public TaskManagementTaskView(Task task) {
+    public TaskManagementTaskView(Task task, ExpendableController expansionController) {
         this.task = task;
+        this.expansionController = expansionController;
 
 
         //build view
@@ -26,6 +28,7 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement {
 
         Hyperlink taskTitle = new Hyperlink(task.getTitle());
         taskTitle.setId("task_" + task.getTitle() + "_title_button");
+        taskTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 
         Button moveUpButton = new Button("Move Up");
         moveUpButton.setId("task_" + task.getTitle() + "_moveup_button");
@@ -46,7 +49,8 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement {
         getChildren().add(simpleView);
     }
 
-    public void switchDetailedView() {
+    @Override
+    public void switchExpansion() {
         if (getChildren().size() < 2) {
             GridPane detailedView = new GridPane();
 

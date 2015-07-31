@@ -1,7 +1,6 @@
 package de.saxsys.gui.view;
 
-import de.saxsys.gui.controller.UserStoryTitleController;
-import de.saxsys.model.Task;
+import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.model.UserStory;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -11,13 +10,13 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class TaskManagementUserStoryTitleView extends VBox {
+public class TaskManagementUserStoryTitleView extends VBox implements Expandable {
     UserStory story;
-    UserStoryTitleController controller;
+    ExpendableController expansionController;
 
-    public TaskManagementUserStoryTitleView(UserStory story) {
+    public TaskManagementUserStoryTitleView(UserStory story, ExpendableController expansionController) {
         this.story = story;
-        this.controller = new UserStoryTitleController();
+        this.expansionController = expansionController;
 
         //build view
         setSimpleView();
@@ -28,7 +27,7 @@ public class TaskManagementUserStoryTitleView extends VBox {
 
         Hyperlink storyTitle = new Hyperlink(story.getTitle());
         storyTitle.setId("userstory_" + story.getTitle() + "_title_button");
-        storyTitle.addEventHandler(ActionEvent.ACTION, controller);
+        storyTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 
         Button moveUpButton = new Button("Move Up");
         moveUpButton.setId("userstory_" + story.getTitle() + "_moveup_button");
@@ -49,7 +48,8 @@ public class TaskManagementUserStoryTitleView extends VBox {
         getChildren().add(simpleView);
     }
 
-    public void switchDetailedView() {
+    @Override
+    public void switchExpansion() {
         if (getChildren().size() < 2) {
             GridPane detailedView = new GridPane();
 

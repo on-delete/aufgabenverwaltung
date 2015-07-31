@@ -1,5 +1,6 @@
 package de.saxsys.gui.view;
 
+import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.model.Status;
 import de.saxsys.model.Task;
 import de.saxsys.model.UserStory;
@@ -13,8 +14,11 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
 
     DoubleBinding columnWith;
     UserStory modelStory;
+    ExpendableController expansionController;
 
-    public TaskManagementUserStoryView(UserStory modelStory, DoubleBinding columnWith) {
+    public TaskManagementUserStoryView(UserStory modelStory, DoubleBinding columnWith, ExpendableController expansionController) {
+       this.expansionController = expansionController;
+
         this.modelStory = modelStory;
         //register to assigned UserStory model
         modelStory.registerView(this);
@@ -29,12 +33,12 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
         for (Status status : Status.values()) {
             if (status.ordinal() == 0) {
                 //adds a view element with userstory title and tasks of the column if its the first column
-                TaskManagementTitledTaskListView titledTaskListView = new TaskManagementTitledTaskListView(modelStory, getTaskListByStatus(status), columnWith);
+                TaskManagementTitledTaskListView titledTaskListView = new TaskManagementTitledTaskListView(modelStory, getTaskListByStatus(status), columnWith, expansionController);
                 titledTaskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "titled_view");
                 getChildren().add(titledTaskListView);
             } else {
                 //otherwise add an view element which only contains the tasks of the column
-                TaskManagementTaskListView taskListView = new TaskManagementTaskListView((getTaskListByStatus(status)), columnWith);
+                TaskManagementTaskListView taskListView = new TaskManagementTaskListView((getTaskListByStatus(status)), columnWith, expansionController);
                 taskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "_view");
                 getChildren().add(taskListView);
             }
