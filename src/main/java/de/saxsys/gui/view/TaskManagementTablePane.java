@@ -1,22 +1,13 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
-import de.saxsys.model.*;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
+import de.saxsys.gui.GlobalController;
+import de.saxsys.gui.GlobalMockController;
+import de.saxsys.model.UserStory;
+import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.geometry.HPos;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.scene.Node;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     private UserStoryList globalModelInstance;
@@ -33,6 +24,7 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
         setHeadings();
         setUserstories();
+        setAddButton();
     }
 
     private void setHeadings() {
@@ -49,6 +41,12 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
             getChildren().add(view);
         }
+    }
+
+    private void setAddButton() {
+        Button addButton = new Button("Add UserStory");
+        addButton.setId("add_userstory_button");
+        getChildren().add(addButton);
     }
 
     @Override

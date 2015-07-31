@@ -1,4 +1,4 @@
-package de.saxsys.gui;
+package de.saxsys.gui.controller;
 
 import de.saxsys.model.Priority;
 import de.saxsys.model.Task;

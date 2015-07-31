@@ -1,10 +1,11 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
-import java.util.List;
 import de.saxsys.model.Task;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
+
+import java.util.List;
 
 public class TaskManagerTaskListView extends ListView<HBox> {
     DoubleBinding listWidth;

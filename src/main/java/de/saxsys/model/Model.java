@@ -1,4 +1,6 @@
-package de.saxsys.gui;
+package de.saxsys.model;
+
+import de.saxsys.gui.view.ActiveViewElement;
 
 public interface Model {
     /**
