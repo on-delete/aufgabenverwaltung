@@ -1,4 +1,4 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
 import de.saxsys.model.Status;
 import de.saxsys.model.Task;
@@ -27,19 +27,24 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
         getChildren().clear();
 
         for (Status status : Status.values()) {
-            TaskManagerTaskListView taskListView = getTaskListViewByStatus(status);
-            taskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "_view");
-
-            getChildren().add(taskListView);
+            if (status.ordinal() == 0) {
+                TaskManagerTitledTaskListView titledTaskListView = new TaskManagerTitledTaskListView(modelStory, getTaskListByStatus(status), columnWith);
+                titledTaskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "titled_view");
+                getChildren().add(titledTaskListView);
+            } else {
+                TaskManagementTaskListView taskListView = new TaskManagementTaskListView((getTaskListByStatus(status)), columnWith);
+                taskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "_view");
+                getChildren().add(taskListView);
+            }
         }
     }
 
-    private TaskManagerTaskListView getTaskListViewByStatus(Status status) {
-        List<Task> tasks = modelStory.stream()
+    private List<Task> getTaskListByStatus(Status status) {
+        List<Task> tasks = modelStory.getTasks().stream()
                 .filter((element) -> ((element.getStatus().equals(status)) ? true : false))
                 .collect(Collectors.toList());
 
-        return new TaskManagerTaskListView(tasks, columnWith);
+        return tasks;
     }
 
     @Override

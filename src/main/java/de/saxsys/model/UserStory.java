@@ -1,22 +1,13 @@
 package de.saxsys.model;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.codehaus.jackson.map.JsonMappingException;
+import com.fasterxml.jackson.core.JsonGenerationException;
+import de.saxsys.gui.view.ActiveViewElement;
 import org.codehaus.jackson.map.ObjectMapper;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-
-import de.saxsys.gui.Model;
-import de.saxsys.gui.ActiveViewElement;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Class for storing information about a userstory. Includes userstory title, priority, description (optional) and a
@@ -37,13 +28,14 @@ public class UserStory implements Model {
 
     //constructor for Jackson, shouldn't be used
     private UserStory() {
+        registeredViews = new HashSet<>();
     }
 
     /**
      * Create a UserStory object without tasks and description
      *
-     * @param title       title of the new userstory
-     * @param priority    priority of the new userstory
+     * @param title    title of the new userstory
+     * @param priority priority of the new userstory
      */
     public UserStory(String title, Priority priority) {
         this(title, priority, (String) null);
@@ -80,8 +72,8 @@ public class UserStory implements Model {
      * @param description description of the new userstory
      */
     public UserStory(String title, Priority priority, List<Task> tasks, String description) {
-        this.tasks = new ArrayList<Task>();
-        this.registeredViews = new HashSet<ActiveViewElement>();
+        this.tasks = new ArrayList<>();
+        this.registeredViews = new HashSet<>();
         setTitle(title);
         setPriority(priority);
         addAllTasks(tasks);
@@ -163,14 +155,14 @@ public class UserStory implements Model {
      * @return the task list
      */
     public List<Task> getTasks() {
-        return this.tasks;
+        return Collections.unmodifiableList(this.tasks);
     }
 
     /**
      * Removes all tasks in the list
      */
     public void removeAllTasks() {
-        this.tasks = new ArrayList<Task>();
+        this.tasks = new ArrayList<>();
         notifyViews();
     }
 
@@ -185,8 +177,7 @@ public class UserStory implements Model {
         if (tasks.remove(target)) {
             notifyViews();
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -249,38 +240,6 @@ public class UserStory implements Model {
     }
 
     /**
-     * Get an Task object by its index in the task list
-     *
-     * @param index the index of the desired Task object
-     * @return the Task object; null if index doesn't exist
-     */
-    public Task getTaskByIndex(int index) {
-        if (index < 0 || index > tasks.size() - 1) {
-            return null;
-        } else {
-            return tasks.get(index);
-        }
-    }
-
-    /**
-     * Gets the number of tasks in the user story
-     *
-     * @return the number of tasks
-     */
-    public int numberOfTasks() {
-        return tasks.size();
-    }
-
-    /**
-     * gets the Stream of the task list
-     *
-     * @return the stream
-     */
-    public Stream<Task> stream() {
-        return tasks.stream();
-    }
-
-    /**
      * Increases the position of a task by 1
      *
      * @param title the title of the target to be moved
@@ -339,8 +298,8 @@ public class UserStory implements Model {
     public boolean equals(UserStory comp) {
         if (this == comp) {
             return true;
-        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority() == comp.getPriority()
-                && this.getDescription().equals(comp.getDescription()) && this.tasksEquals(comp)) {
+        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
+                && this.getDescription().equals(comp.getDescription()) && taskListEquals(comp.getTasks())) {
             return true;
         } else {
             return false;
@@ -398,24 +357,11 @@ public class UserStory implements Model {
      * @throws IOException
      * @throws JsonGenerationException
      */
-    public String toJson() throws JsonGenerationException, IOException {
+    public String toJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(this);
     }
 
-    // checks if the task lists of this and of another UserStory object are equal
-    private boolean tasksEquals(UserStory comp) {
-        if (this.numberOfTasks() != comp.numberOfTasks()) {
-            return false;
-        } else {
-            for (int i = 0; i <= this.numberOfTasks() - 1; i++) {
-                if (!this.getTaskByIndex(i).equals(comp.getTaskByIndex(i))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-    }
 
     // Model methods
 
@@ -437,6 +383,21 @@ public class UserStory implements Model {
     public void notifyViews() {
         for (ActiveViewElement element : registeredViews) {
             element.refresh();
+        }
+    }
+
+    private boolean taskListEquals(List<Task> comp) {
+        if (this.getTasks() == comp) {
+            return true;
+        } else if (this.getTasks().size() != comp.size()) {
+            return false;
+        } else {
+            for (int i = 0; i < this.getTasks().size(); i++) {
+                if (!this.getTasks().get(i).equals(comp.get(i))) {
+                    return true;
+                }
+            }
+            return true;
         }
     }
 }

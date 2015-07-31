@@ -1,11 +1,11 @@
 package de.saxsys.model;
 
+import org.junit.Before;
+import org.junit.Test;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.*;
 
@@ -72,7 +72,7 @@ public class UserStoryListTest {
 		test.addUserStory(myUserStory1);
 		test.addUserStory(myUserStory2);
 		
-		assertEquals(test.numberOfUserStories(), 2);
+		assertEquals(test.getUserStories().size(), 2);
 
 	}
 	

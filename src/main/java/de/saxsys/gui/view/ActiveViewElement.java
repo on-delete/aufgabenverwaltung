@@ -1,4 +1,4 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
 /**
  * Interface for all View Elements in the Application

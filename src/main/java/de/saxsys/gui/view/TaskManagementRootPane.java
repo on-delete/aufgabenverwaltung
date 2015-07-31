@@ -1,4 +1,4 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
 import javafx.geometry.Insets;
 import javafx.scene.layout.BorderPane;

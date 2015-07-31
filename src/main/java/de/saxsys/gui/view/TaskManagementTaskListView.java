@@ -1,16 +1,17 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
-import java.util.List;
 import de.saxsys.model.Task;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 
-public class TaskManagerTaskListView extends ListView<HBox> {
+import java.util.List;
+
+public class TaskManagementTaskListView extends ListView<HBox> {
     DoubleBinding listWidth;
     List<Task> tasks;
 
-    public TaskManagerTaskListView(List<Task> tasks, DoubleBinding listWidth) {
+    public TaskManagementTaskListView(List<Task> tasks, DoubleBinding listWidth) {
         this.listWidth = listWidth;
         this.setPrefWidth(listWidth.get());
         this.listWidth.addListener((e) -> {
@@ -24,7 +25,7 @@ public class TaskManagerTaskListView extends ListView<HBox> {
 
     private void setTasks() {
         for (Task task : tasks) {
-            TaskManagerTaskView taskView = new TaskManagerTaskView(task);
+            TaskManagementTaskView taskView = new TaskManagementTaskView(task);
             taskView.setId(task.getTitle() + "_view");
             getItems().add(taskView);
         }

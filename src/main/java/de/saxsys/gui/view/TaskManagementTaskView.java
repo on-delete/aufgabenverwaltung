@@ -1,12 +1,12 @@
-package de.saxsys.gui;
+package de.saxsys.gui.view;
 
 import de.saxsys.model.Task;
 import javafx.scene.control.Button;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 
-public class TaskManagerTaskView extends HBox {
-    public TaskManagerTaskView(Task task) {
+public class TaskManagementTaskView extends HBox {
+    public TaskManagementTaskView(Task task) {
        Text taskTitle = new Text(task.getTitle());
        Button moveUpButton = new Button("Move Up");
        Button moveDownButton = new Button("Move Down");

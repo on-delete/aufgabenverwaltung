@@ -1,6 +1,5 @@
 package de.saxsys.server;
 
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.jdbc.JDBCClient;
@@ -9,16 +8,16 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 
+
 import java.util.concurrent.TimeoutException;
 
 import org.apache.derby.tools.sysinfo;
 import org.apache.derby.vti.AwareVTI;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import de.saxsys.model.Priority;
 
 /**
  * Created by andre.krause on 30.07.2015.
@@ -42,6 +41,11 @@ public class SQLStatementTest {
 	@After
 	public void tearDown(TestContext context) {
 		client.close();
+	}
+	
+	@After
+	public void tearDown2(TestContext context) {
+		vertx.close(context.asyncAssertSuccess());
 	}
 	
 	
@@ -149,6 +153,7 @@ public class SQLStatementTest {
 	}
 	
 	@Test
+	
 	public void testDeleteUserstory(TestContext context)
 	{
 		Async async1 = context.async();

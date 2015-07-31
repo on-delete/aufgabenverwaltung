@@ -1,12 +1,11 @@
 package de.saxsys.model;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import de.saxsys.gui.view.ActiveViewElement;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import java.io.IOException;
 import java.util.*;
-
-import de.saxsys.gui.ActiveViewElement;
-import de.saxsys.gui.Model;
-import org.codehaus.jackson.map.ObjectMapper;
-import com.fasterxml.jackson.core.JsonGenerationException;
 
 
 public class UserStoryList implements Model {
@@ -22,7 +21,7 @@ public class UserStoryList implements Model {
      */
     public UserStoryList() {
         this.registeredViews = new HashSet<>();
-        this.userStories = new ArrayList<UserStory>();
+        this.userStories = new ArrayList<>();
     }
 
     /**
@@ -52,11 +51,11 @@ public class UserStoryList implements Model {
     /**
      * Adds a new UserStory to the UserStoryList
      *
-     * @param userStory
-     * @return
+     * @param userStory the UserStory object to be added
+     * @return True if adding was successful
      */
     public boolean addUserStory(UserStory userStory) {
-        if (userStory != null && getUserStory(userStory.getTitle()) == null) {
+        if (userStory != null && getUserStoryByTitle(userStory.getTitle()) == null) {
             this.userStories.add(userStory);
             notifyViews();
             return true;
@@ -70,11 +69,11 @@ public class UserStoryList implements Model {
      * Removes one specified UserStory from the UserStoryList
      *
      * @param title title of the UserStory to be deleted
-     * @return
+     * @return True if removing was successful
      */
     public boolean removeUserStory(String title) {
         if (title != null) {
-            UserStory target = getUserStory(title);
+            UserStory target = getUserStoryByTitle(title);
             if (target != null) {
                 userStories.remove(target);
                 notifyViews();
@@ -92,7 +91,7 @@ public class UserStoryList implements Model {
      * Removes all UserStories from the respective UserStoryList
      */
     public void removeAllUserStories() {
-        this.userStories = new ArrayList<UserStory>();
+        this.userStories = new ArrayList<>();
         notifyViews();
     }
 
@@ -104,7 +103,7 @@ public class UserStoryList implements Model {
      * @return true if the movement was successful
      */
     public boolean moveUserStoryUp(String title) {
-        UserStory target = getUserStory(title);
+        UserStory target = getUserStoryByTitle(title);
 
         if (target != null) {
             int oldIndex = userStories.indexOf(target);
@@ -130,7 +129,7 @@ public class UserStoryList implements Model {
      * @return true if the movement was successful
      */
     public boolean moveUserStoryDown(String title) {
-        UserStory target = getUserStory(title);
+        UserStory target = getUserStoryByTitle(title);
 
         if (target != null) {
             int oldIndex = userStories.indexOf(target);
@@ -152,17 +151,17 @@ public class UserStoryList implements Model {
     /**
      * Defines the equals method for the UserStoryList-Class
      *
-     * @param comp
-     * @return
+     * @param comp the UserStoryList to compare to
+     * @return True if both objects are equal
      */
     public boolean equals(UserStoryList comp) {
         if (this == comp) {
             return true;
-        } else if (this.numberOfUserStories() != comp.numberOfUserStories()) {
+        } else if (this.getUserStories().size() != comp.getUserStories().size()) {
             return false;
         } else {
-            for (int i = 0; i < this.numberOfUserStories(); i++) {
-                if (!this.getUserStory(i).equals(comp.getUserStory(i))) {
+            for (int i = 0; i < this.getUserStories().size(); i++) {
+                if (!this.getUserStories().get(i).equals(comp.getUserStories().get(i))) {
                     return false;
                 }
             }
@@ -170,44 +169,18 @@ public class UserStoryList implements Model {
         }
     }
 
-    /**
-     * Returns the size of the ArrayList userStories
-     *
-     * @return
-     */
-    public int numberOfUserStories() {
-        return userStories.size();
-    }
 
     // For Commands
-    public UserStory getUserStory(String title) {
+    public UserStory getUserStoryByTitle(String title) {
         // find first element which title property matches the input
-        Optional<UserStory> result = userStories.stream().filter((element) -> {
-            if (element.getTitle().equals(title)) {
-                return true;
-            } else {
-                return false;
-            }
-        }).findFirst();
+        Optional<UserStory> result = userStories.stream().filter((element) -> (
+                (element.getTitle().equals(title))
+        )).findFirst();
 
         if (result.isPresent()) {
             return result.get();
         } else {
             return null;
-        }
-    }
-
-    /**
-     * Get an Task object by its index in the task list
-     *
-     * @param index the index of the desired Task object
-     * @return the Task object; null if index doesn't exist
-     */
-    public UserStory getUserStory(int index) {
-        if (index < 0 || index > userStories.size() - 1) {
-            return null;
-        } else {
-            return userStories.get(index);
         }
     }
 
@@ -225,8 +198,8 @@ public class UserStoryList implements Model {
     }
 
     /**
-     * @param inputUserStoryList
-     * @return
+     * @param inputUserStoryList the user story to be serialized
+     * @return Json String
      * @throws IOException
      */
     public static String toJson(UserStoryList inputUserStoryList) throws IOException {
@@ -239,9 +212,7 @@ public class UserStoryList implements Model {
      *
      * @param jsonString The JSON serialization to be marshaled
      * @return The created Task object
-     * @throws JsonMappingException if the parsed data couldn't be mapped to the object
-     * @throws JsonParseException   if the data couldn't be parsed
-     * @throws IOException          shouldn't occur
+     * @throws IOException shouldn't occur
      */
     public static UserStoryList fromJson(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -252,16 +223,21 @@ public class UserStoryList implements Model {
     /**
      * Creates an JSON Serialization from the calling object object
      *
-     * @return
+     * @return Json String
      * @throws JsonGenerationException
      * @throws IOException
      */
-    public String toJson() throws JsonGenerationException, IOException {
+    public String toJson() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(this);
     }
 
+    /**
+     * gets the userstory list
+     *
+     * @return Userstories as unmodifiable list
+     */
     public List<UserStory> getUserStories() {
-        return this.userStories;
+        return Collections.unmodifiableList(this.userStories);
     }
 }
