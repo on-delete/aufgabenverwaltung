@@ -1,13 +1,13 @@
 package de.saxsys.model;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 

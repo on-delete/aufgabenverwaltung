@@ -1,15 +1,11 @@
 package de.saxsys.server;
 
 import de.saxsys.model.Priority;
-import de.saxsys.model.Task;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.jdbc.JDBCClient;
 import io.vertx.ext.sql.SQLConnection;
-import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.VertxUnitRunner;
 
 public class SQLStatement {
 	

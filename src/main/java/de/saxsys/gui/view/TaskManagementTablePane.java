@@ -1,7 +1,7 @@
 package de.saxsys.gui.view;
 
-import de.saxsys.gui.GlobalController;
-import de.saxsys.gui.GlobalMockController;
+import de.saxsys.gui.controller.GlobalController;
+import de.saxsys.gui.controller.GlobalMockController;
 import de.saxsys.model.UserStory;
 import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;

@@ -1,14 +1,13 @@
 package de.saxsys.model;
 
-import java.io.IOException;
-import java.util.*;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.codehaus.jackson.map.ObjectMapper;
 import com.fasterxml.jackson.core.JsonGenerationException;
-import de.saxsys.gui.Model;
-import de.saxsys.gui.ActiveViewElement;
+import de.saxsys.gui.view.ActiveViewElement;
+import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Class for storing information about a userstory. Includes userstory title, priority, description (optional) and a

@@ -32,7 +32,7 @@ public class TaskManagementUserStoryView extends HBox implements ActiveViewEleme
                 titledTaskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "titled_view");
                 getChildren().add(titledTaskListView);
             } else {
-                TaskManagerTaskListView taskListView = new TaskManagerTaskListView((getTaskListByStatus(status)), columnWith);
+                TaskManagementTaskListView taskListView = new TaskManagementTaskListView((getTaskListByStatus(status)), columnWith);
                 taskListView.setId(modelStory.getTitle() + "_" + RowTitles.ROW_TITLES.get(status).toLowerCase() + "_view");
                 getChildren().add(taskListView);
             }

@@ -1,6 +1,5 @@
 package de.saxsys.model;
 
-import org.codehaus.jackson.map.JsonMappingException;
 import org.junit.Before;
 import org.junit.Test;
 

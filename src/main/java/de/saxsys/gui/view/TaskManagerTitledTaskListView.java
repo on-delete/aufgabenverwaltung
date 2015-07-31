@@ -35,7 +35,7 @@ public class TaskManagerTitledTaskListView extends VBox {
     }
 
     private void setTasks() {
-        TaskManagerTaskListView taskListView = new TaskManagerTaskListView(tasks, listWidth);
+        TaskManagementTaskListView taskListView = new TaskManagementTaskListView(tasks, listWidth);
         taskListView.setId(story.getTitle() + "_" + RowTitles.ROW_TITLES.get(Status.values()[0]).toLowerCase() + "_view");
 
         getChildren().add(taskListView);

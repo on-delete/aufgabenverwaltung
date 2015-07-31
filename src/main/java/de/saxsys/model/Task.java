@@ -1,18 +1,14 @@
 package de.saxsys.model;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import de.saxsys.gui.Model;
-import de.saxsys.gui.ActiveViewElement;
-
-import java.io.IOException;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-
+import de.saxsys.gui.view.ActiveViewElement;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Class for storing information about a task. Includes task title, priority, description (optional) and name of th

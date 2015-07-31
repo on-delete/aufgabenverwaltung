@@ -1,12 +1,11 @@
 package de.saxsys.model;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import de.saxsys.gui.view.ActiveViewElement;
+import org.codehaus.jackson.map.ObjectMapper;
+
 import java.io.IOException;
 import java.util.*;
-
-import de.saxsys.gui.ActiveViewElement;
-import de.saxsys.gui.Model;
-import org.codehaus.jackson.map.ObjectMapper;
-import com.fasterxml.jackson.core.JsonGenerationException;
 
 
 public class UserStoryList implements Model {
