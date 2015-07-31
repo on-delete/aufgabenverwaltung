@@ -2,10 +2,13 @@ package de.saxsys.gui.view;
 
 import de.saxsys.model.Task;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+
+import javax.swing.event.HyperlinkEvent;
 
 public class TaskManagementTaskView extends VBox implements ActiveViewElement {
     Task task;
@@ -21,7 +24,7 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement {
     private void setSimpleView() {
         HBox simpleView = new HBox();
 
-        Text taskTitle = new Text(task.getTitle());
+        Hyperlink taskTitle = new Hyperlink(task.getTitle());
         taskTitle.setId("task_" + task.getTitle() + "_title_button");
 
         Button moveUpButton = new Button("Move Up");

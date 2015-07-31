@@ -1,8 +1,11 @@
 package de.saxsys.gui.view;
 
+import de.saxsys.gui.controller.UserStoryTitleController;
 import de.saxsys.model.Task;
 import de.saxsys.model.UserStory;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -10,10 +13,11 @@ import javafx.scene.text.Text;
 
 public class TaskManagementUserStoryTitleView extends VBox {
     UserStory story;
+    UserStoryTitleController controller;
 
     public TaskManagementUserStoryTitleView(UserStory story) {
         this.story = story;
-
+        this.controller = new UserStoryTitleController();
 
         //build view
         setSimpleView();
@@ -22,8 +26,9 @@ public class TaskManagementUserStoryTitleView extends VBox {
     private void setSimpleView() {
         HBox simpleView = new HBox();
 
-        Text storyTitle = new Text(story.getTitle());
+        Hyperlink storyTitle = new Hyperlink(story.getTitle());
         storyTitle.setId("userstory_" + story.getTitle() + "_title_button");
+        storyTitle.addEventHandler(ActionEvent.ACTION, controller);
 
         Button moveUpButton = new Button("Move Up");
         moveUpButton.setId("userstory_" + story.getTitle() + "_moveup_button");
