@@ -11,6 +11,7 @@ import io.vertx.ext.unit.junit.VertxUnitRunner;
 
 import java.util.concurrent.TimeoutException;
 
+import org.apache.derby.tools.sysinfo;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -115,8 +116,6 @@ public class SQLStatementTest {
 		});
 	}
 	
-	/////////////////// Stand 30. Juli: Alles funktioniert, bloß nicht "res1.result().getResults().get(0).toString());"
-	
 	//t_id; t_title; t_description; t_priority; t_inCharge; t_order; u_id
 	@Test
 	public void testInsertTask(TestContext context)
@@ -127,9 +126,6 @@ public class SQLStatementTest {
 			SQLConnection connection = res.result();
 			initDatabase(connection);
 			
-			// Die Userstories erzeuge ich, damit ich bei den Tasks eine u_id angeben kann.
-			// Weil ich nicht weiß, ob die IDs bei 0 oder 1 anfangen, generiere ich zwei Userstories und nehme einfach "1".
-			// Damit bin ich auf der sicheren Seite.
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 1', 'An Userstory0', 'HIGH', 	0);", res21 -> {
 			});
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res22 -> {
@@ -140,9 +136,6 @@ public class SQLStatementTest {
 			
 			connection.query("SELECT * FROM task", res1 -> {
 				context.assertFalse(res1.result().getResults().isEmpty());
-				
-				//Q: Warum ist getResults() leer?
-				//context.assertEquals("[0,\"task 1\",\"A task\",\"HIGH\",\"\",0,1]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -166,14 +159,13 @@ public class SQLStatementTest {
 			connection.execute("INSERT INTO userstory VALUES (NEXT VALUE FOR u_id_squence, 'userstory 2', 'An Userstory1', 'MIDDLE', 1);", res22 -> {
 			});
 			
-			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1", res2 -> {
+			connection.execute("INSERT INTO task VALUES (NEXT VALUE FOR t_id_squence, 'task 1', 'A task', 'HIGH', '', 0, 1);", res2 -> {
 			});
-			connection.execute("UPDATE task SET t_title='manipulated task', t_description='manipulated description', t_priority='MIDDLE', t_inCharge='');", res2 -> {
+			connection.execute("UPDATE task SET t_title='manipulated task', t_description='manipulated description', t_priority='MIDDLE', t_inCharge='';", res2 -> {
 			});
 		
 			connection.query("SELECT * FROM task", res1 -> {
-				System.out.println(res1.result().getResults().get(0).toString());
-		//		context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE\",\"\",0,1]", res1.result().getResults().get(0).toString());
+				context.assertEquals("[0,\"manipulated task\",\"manipulated description\",\"MIDDLE\",\"\",0,1]", res1.result().getResults().get(0).toString());
 				
 				async1.complete();
 			});
@@ -204,7 +196,7 @@ public class SQLStatementTest {
 			connection.query("SELECT task.t_title FROM task WHERE t_title='task 1'", res11 -> {
 				context.assertEquals("[\"task 1\"]", res11.result().getResults().get(0).toString());
 			});	
-			connection.query("SELECT task.t_prority FROM task WHERE t_priority='LOW'", res12 -> {
+			connection.query("SELECT task.t_priority FROM task WHERE t_priority='LOW'", res12 -> {
 				context.assertEquals("[\"LOW\"]", res12.result().getResults().get(0).toString());
 					
 				async1.complete();
