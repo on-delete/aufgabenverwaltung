@@ -17,20 +17,20 @@ public class UserStoryTest {
     @Before
     public void before() {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Task1", Priority.HIGH));
-        tasks.add(new Task("Task2", Priority.HIGH));
-        tasks.add(new Task("Task3", Priority.MIDDLE));
-        tasks.add(new Task("Task4", Priority.LOW));
-        tasks.add(new Task("Task5", Priority.VERY_LOW));
+        tasks.add(new Task(0, "Task1", Priority.HIGH));
+        tasks.add(new Task(1, "Task2", Priority.HIGH));
+        tasks.add(new Task(2, "Task3", Priority.MIDDLE));
+        tasks.add(new Task(3, "Task4", Priority.LOW));
+        tasks.add(new Task(4, "Task5", Priority.VERY_LOW));
 
-        userstory = new UserStory("Story1", Priority.HIGH, tasks, "An userstory");
+        userstory = new UserStory(0, "Story1", Priority.HIGH, tasks, "An userstory");
     }
 
     @Test
     public void testConstructor() {
         // Also tests addTask and addAllTasks hbecause they are used by the constructor
 
-        UserStory userstory2 = new UserStory("Story2", Priority.MIDDLE);
+        UserStory userstory2 = new UserStory(0, "Story2", Priority.MIDDLE);
 
         assertEquals("Story2", userstory2.getTitle());
         assertEquals(Priority.MIDDLE, userstory2.getPriority());
@@ -61,25 +61,25 @@ public class UserStoryTest {
 
     @Test
     public void testGetTask() {
-        Task testTask = new Task("Task2", Priority.HIGH);
+        Task testTask = new Task(1, "Task2", Priority.HIGH);
 
         assertTrue(testTask.equals(userstory.getTaskByTitle("Task2")));
     }
     
     @Test
     public void testAddTask() {
-        assertTrue(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding new task
+        assertTrue(userstory.addTask(new Task(5, "Task6", Priority.HIGH))); //adding new task
         assertNotNull(userstory.getTaskByTitle("Task6"));
         
-        assertFalse(userstory.addTask(new Task("Task6", Priority.HIGH))); //adding task that allready exists
+        assertFalse(userstory.addTask(new Task(5, "Task6", Priority.HIGH))); //adding task that allready exists
     } 
     
     @Test
     public void testAddAllTasks() {
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Task3", Priority.MIDDLE));  //adding task that allready exists
-        tasks.add(new Task("Task6", Priority.LOW)); //adding new task
-        tasks.add(new Task("Task7", Priority.VERY_LOW)); //adding new task
+        tasks.add(new Task(2, "Task3", Priority.MIDDLE));  //adding task that allready exists
+        tasks.add(new Task(5, "Task6", Priority.LOW)); //adding new task
+        tasks.add(new Task(6, "Task7", Priority.VERY_LOW)); //adding new task
         
         assertEquals(2, userstory.addAllTasks(tasks));
         assertNotNull(userstory.getTaskByTitle("Task6"));
@@ -96,7 +96,7 @@ public class UserStoryTest {
     @Test
     public void testToJSON() throws IOException{
         //Json representation of the userstory object
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
+        String jsonString = "{\"id\":0,\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"id\":0,\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":1,\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":2,\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":3,\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":4,\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         assertEquals(jsonString, userstory.toJson());
         assertEquals(jsonString, UserStory.toJson(userstory));
     }
@@ -104,10 +104,10 @@ public class UserStoryTest {
     @Test
     public void testFromJSON() throws IOException{
         //Json representation of an UserStory object, which equals userstory
-        String jsonString = "{\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
+        String jsonString = "{\"id\":0,\"title\":\"Story1\",\"description\":\"An userstory\",\"tasks\":[{\"id\":0,\"title\":\"Task1\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":1,\"title\":\"Task2\",\"priority\":\"HIGH\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":2,\"title\":\"Task3\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":3,\"title\":\"Task4\",\"priority\":\"LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"},{\"id\":4,\"title\":\"Task5\",\"priority\":\"VERY_LOW\",\"status\":\"TODO\",\"description\":\"\",\"inCharge\":\"\"}],\"priority\":\"HIGH\"}";
         
         UserStory userstoryFromJson = UserStory.fromJson(jsonString);
-        
+
         assertTrue(userstory.equals(userstoryFromJson));
     }
     
@@ -118,9 +118,9 @@ public class UserStoryTest {
     
     @Test
     public void testHashCode() {
-        UserStory userstory2 = new UserStory("Story2", Priority.MIDDLE);
-        UserStory userstory3 = new UserStory("Story2", Priority.MIDDLE);
-        UserStory userstory4= new UserStory("Story4", Priority.LOW);
+        UserStory userstory2 = new UserStory(0, "Story2", Priority.MIDDLE);
+        UserStory userstory3 = new UserStory(0, "Story2", Priority.MIDDLE);
+        UserStory userstory4= new UserStory(1, "Story4", Priority.LOW);
         
         assertTrue(userstory2.hashCode() == userstory3.hashCode());
         assertFalse(userstory2.hashCode() == userstory4.hashCode());
@@ -147,15 +147,15 @@ public class UserStoryTest {
     @Test
     public void testEquals() throws IOException{
         List<Task> tasks = new ArrayList<>();
-        tasks.add(new Task("Task1", Priority.HIGH));
-        tasks.add(new Task("Task2", Priority.HIGH));
-        tasks.add(new Task("Task3", Priority.MIDDLE));
-        tasks.add(new Task("Task4", Priority.LOW));
-        UserStory userstory2 = new UserStory("Story1", Priority.HIGH, tasks, "An userstory");
+        tasks.add(new Task(0, "Task1", Priority.HIGH));
+        tasks.add(new Task(1, "Task2", Priority.HIGH));
+        tasks.add(new Task(2, "Task3", Priority.MIDDLE));
+        tasks.add(new Task(3, "Task4", Priority.LOW));
+        UserStory userstory2 = new UserStory(0, "Story1", Priority.HIGH, tasks, "An userstory");
         
         assertFalse(userstory.equals(userstory2));
         
-        userstory2.addTask(new Task("Task5", Priority.VERY_LOW));
+        userstory2.addTask(new Task(4, "Task5", Priority.VERY_LOW));
 
         assertTrue(userstory.equals(userstory2));
         

@@ -12,13 +12,13 @@ public class TaskTest {
     
     @Before
     public void before() {
-        task = new Task("Task1", Priority.MIDDLE, "A standard Task", "Person");
+        task = new Task(0, "Task1", Priority.MIDDLE, "A standard Task", "Person");
     }
     
     //Constructor test
     @Test
     public void testConstructor() {
-        Task task2 = new Task("Task2", Priority.MIDDLE);
+        Task task2 = new Task(1, "Task2", Priority.MIDDLE);
         
         assertNotNull(task2);
         assertEquals("Task2", task2.getTitle());
@@ -32,10 +32,10 @@ public class TaskTest {
     @Test
     public void testEquals() {
         Task task1 = task; //same object
-        Task task2 = new Task("Task1", Priority.MIDDLE, "A standard Task", "Person"); //object that is equal
-        Task task3 = new Task("Task3", Priority.MIDDLE, "A standard Task", "Person"); //object that is different
-        Task task4 = new Task("Task4", Priority.MIDDLE); //object that contains null values
-        Task task5 = new Task("Task4", Priority.MIDDLE); //object that contains null values which is equal to the other one
+        Task task2 = new Task(0, "Task1", Priority.MIDDLE, "A standard Task", "Person"); //object that is equal
+        Task task3 = new Task(2, "Task3", Priority.MIDDLE, "A standard Task", "Person"); //object that is different
+        Task task4 = new Task(0, "Task4", Priority.MIDDLE); //object that contains null values
+        Task task5 = new Task(0, "Task4", Priority.MIDDLE); //object that contains null values which is equal to the other one
         
         assertTrue(task.equals(task1));
         assertTrue(task.equals(task2));
@@ -61,7 +61,7 @@ public class TaskTest {
     @Test
     public void testStaticToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
+            assertEquals("{\"id\":0,\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", Task.toJson(task));
         }
         catch (Exception e) {
             fail();
@@ -71,7 +71,7 @@ public class TaskTest {
     @Test
     public void testToJson() {
         try {
-            assertEquals("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
+            assertEquals("{\"id\":0,\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}", task.toJson());
         }
         catch (Exception e) {
             fail();
@@ -80,7 +80,7 @@ public class TaskTest {
     
     @Test
     public void testFromJson() throws IOException{
-            Task task2 = Task.fromJson("{\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
+            Task task2 = Task.fromJson("{\"id\":0,\"title\":\"Task1\",\"priority\":\"MIDDLE\",\"status\":\"TODO\",\"description\":\"A standard Task\",\"inCharge\":\"Person\"}");
             assertTrue(task.equals(task2));
     }
 

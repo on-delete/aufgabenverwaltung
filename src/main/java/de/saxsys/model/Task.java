@@ -15,7 +15,8 @@ import java.util.Set;
  * person in charge for this task (optional).
  */
 public class Task implements Model {
-
+    @JsonProperty(required = true)
+    private Integer id;
     @JsonProperty(required = true)
     private String title;
     @JsonProperty(required = true)
@@ -34,47 +35,37 @@ public class Task implements Model {
 
     /**
      * Create a Task without description and person in charge
-     * 
-     * @param title
-     *            Title of the new Task object
-     * @param priority
-     *            Priority of the new Task object
+     *
+     * @param title    Title of the new Task object
+     * @param priority Priority of the new Task object
      */
-    public Task(String title, Priority priority) {
-        this(title, priority, null);
+    public Task(int id, String title, Priority priority) {
+        this(id, title, priority, null);
     }
 
     /**
      * Create a Task without person in charge
-     * 
-     * @param title
-     *            Title of the new Task object
-     * @param priority
-     *            Priority of the new Task object
-     * @param description
-     *            description of the new Task object
+     *
+     * @param title       Title of the new Task object
+     * @param priority    Priority of the new Task object
+     * @param description description of the new Task object
      */
-    public Task(String title, Priority priority, String description) {
-        this(title, priority, description, null);
+    public Task(int id, String title, Priority priority, String description) {
+        this(id, title, priority, description, null);
     }
 
     /**
      * Create a Task with all information
-     * 
-     * @param title
-     *            Title of the new Task object
-     * @param priority
-     *            Priority of the new Task object
-     * @param description
-     *            description of the new Task object
-     * @param inCharge
-     *            person in charge of the new Task object
-     * @throws IllegalArgumentException
-     *             If title is null
-     * @throws IllegalArgumentException
-     *             If priority is 0
+     *
+     * @param title       Title of the new Task object
+     * @param priority    Priority of the new Task object
+     * @param description description of the new Task object
+     * @param inCharge    person in charge of the new Task object
+     * @throws IllegalArgumentException If title is null
+     * @throws IllegalArgumentException If priority is 0
      */
-    public Task(String title, Priority priority, String description, String inCharge) {
+    public Task(int id, String title, Priority priority, String description, String inCharge) {
+        this.id = id;
         this.registeredViews = new HashSet<ActiveViewElement>();
         setTitle(title);
         setPriority(priority);
@@ -86,7 +77,7 @@ public class Task implements Model {
     public boolean equals(Task comp) {
         if (this == comp) {
             return true;
-        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
+        } else if ( this.getId() == comp.getId() && this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
                 && this.getDescription().equals(comp.getDescription()) && this.getInCharge().equals(comp.getInCharge())
                 && this.getStatus().equals(comp.getStatus())) {
             return true;
@@ -97,11 +88,9 @@ public class Task implements Model {
 
     /**
      * Set a new task title in the Task object
-     * 
-     * @param title
-     *            new title for the Task object; null is not allowed
-     * @throws IllegalArgumentException
-     *             If title is null
+     *
+     * @param title new title for the Task object; null is not allowed
+     * @throws IllegalArgumentException If title is null
      */
     public void setTitle(String title) {
         if (title != null) {
@@ -114,9 +103,8 @@ public class Task implements Model {
 
     /**
      * Set a new task priority in the Task object
-     * 
-     * @param priority
-     *            new priority for the Task object; Default: MIDDLE
+     *
+     * @param priority new priority for the Task object; Default: MIDDLE
      */
     public void setPriority(Priority priority) {
         if (priority != null) {
@@ -131,12 +119,11 @@ public class Task implements Model {
      * Increase task status in the Task object
      */
     public boolean increaseStatus() {
-        if (this.status.ordinal() < Status.values().length-1) {
-            this.status = Status.values()[this.status.ordinal()+1];
+        if (this.status.ordinal() < Status.values().length - 1) {
+            this.status = Status.values()[this.status.ordinal() + 1];
             notifyViews();
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -155,9 +142,8 @@ public class Task implements Model {
 
     /**
      * Set a new person in charge for the task in the Task object
-     * 
-     * @param inCharge
-     *            new name of person in charge for the Task object
+     *
+     * @param inCharge new name of person in charge for the Task object
      */
     public void setInCharge(String inCharge) {
         if (inCharge != null) {
@@ -169,8 +155,17 @@ public class Task implements Model {
     }
 
     /**
+     * gets the id of the task
+     *
+     * @return the id
+     */
+    public int getId() {
+        return this.id;
+    }
+
+    /**
      * Gets the title of the task
-     * 
+     *
      * @return The title as an String
      */
     public String getTitle() {
@@ -179,7 +174,7 @@ public class Task implements Model {
 
     /**
      * Gets the priority of the task
-     * 
+     *
      * @return The priority of the task
      */
     public Priority getPriority() {
@@ -188,7 +183,7 @@ public class Task implements Model {
 
     /**
      * Gets the status of the task
-     * 
+     *
      * @return The status of the task
      */
     public Status getStatus() {
@@ -197,7 +192,7 @@ public class Task implements Model {
 
     /**
      * Gets the description of the task
-     * 
+     *
      * @return The description as an String
      */
     public String getDescription() {
@@ -206,7 +201,7 @@ public class Task implements Model {
 
     /**
      * Gets the person in charge of the task
-     * 
+     *
      * @return The name of the person in charge as an String
      */
     public String getInCharge() {
@@ -215,9 +210,8 @@ public class Task implements Model {
 
     /**
      * Creates an JSON Serialization of the given Task object
-     * 
-     * @param inputTask
-     *            The task objhect to be serialized
+     *
+     * @param inputTask The task objhect to be serialized
      * @return The JSON String
      */
     public static String toJson(Task inputTask) throws IOException {
@@ -227,14 +221,11 @@ public class Task implements Model {
 
     /**
      * Creates a task object from an JSON serialization
-     * 
-     * @param jsonString
-     *            The JSON serialization to be nmarshalled
+     *
+     * @param jsonString The JSON serialization to be nmarshalled
      * @return The created Task object
-     * @throws JsonParseException
-     *             if the data couldn't be parsed
-     * @throws IOException
-     *             shouldn't occur
+     * @throws JsonParseException if the data couldn't be parsed
+     * @throws IOException        shouldn't occur
      */
     public static Task fromJson(String jsonString) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
@@ -243,7 +234,7 @@ public class Task implements Model {
 
     /**
      * Creates an JSON Serialization from the calling object object
-     * 
+     *
      * @return The JSON String
      */
     public String toJson() throws IOException {
@@ -255,9 +246,8 @@ public class Task implements Model {
 
     /**
      * Adds en view Element, that will be notified whenever a property is changed
-     * 
-     * @param view
-     *            the view Element
+     *
+     * @param view the view Element
      * @return True if element was added
      */
     @Override
