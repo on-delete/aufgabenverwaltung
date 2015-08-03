@@ -13,7 +13,7 @@ public class InitDatabaseVerticle extends AbstractVerticle{
 		final JDBCClient client = JDBCClient.createShared(vertx, new JsonObject()
 				.put("url", "jdbc:hsqldb:file:db/aufgabenDB")
 				.put("driver_class", "org.hsqldb.jdbcDriver")
-				.put("max_pool_size", 30));
+				.put("max_pool_size", 30), "aufgabenDB");
 
 		client.getConnection(conn -> {
 			if (conn.failed()) {
@@ -37,18 +37,6 @@ public class InitDatabaseVerticle extends AbstractVerticle{
 					System.out.println(res.cause().getMessage());
 				}
 			});
-			/*conn.result().execute("insert into userstory values (NEXT VALUE FOR u_id_squence, 'userstory 1', '', 'HIGH');", res -> {
-				if(!res.succeeded()){
-					System.out.println(res.cause().getMessage());
-				}
-			});
-			conn.result().execute("insert into task values (NEXT VALUE FOR t_id_squence, 'task 1', '', 'HIGH', 'Andre', (SELECT u_id FROM userstory WHERE u_id=1));", res -> {
-				if(!res.succeeded()){
-					System.out.println(res.cause().getMessage());
-				}
-			});
-*/
-
 		});
 	}
 }
