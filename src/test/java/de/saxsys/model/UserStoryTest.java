@@ -88,7 +88,7 @@ public class UserStoryTest {
     
     @Test
     public void testRemoveTask() {
-        assertTrue(userstory.removeTask("Task4"));
+        assertTrue(userstory.removeTask(3));
 
         assertNull(userstory.getTaskByTitle("Task4"));
     }
@@ -128,8 +128,8 @@ public class UserStoryTest {
     
     @Test
     public void testMoveTaskUp() {
-        assertFalse(userstory.moveTaskUp("Task1"));
-        assertTrue(userstory.moveTaskUp("Task5"));
+        assertFalse(userstory.moveTaskUp(0));
+        assertTrue(userstory.moveTaskUp(4));
         
         assertEquals("Task5", userstory.getTasks().get(3).getTitle());
         assertEquals("Task4", userstory.getTasks().get(4).getTitle());
@@ -137,8 +137,8 @@ public class UserStoryTest {
     
     @Test
     public void testMoveTaskDown() {
-        assertFalse(userstory.moveTaskDown("Task5"));
-        assertTrue(userstory.moveTaskDown("Task4"));
+        assertFalse(userstory.moveTaskDown(4));
+        assertTrue(userstory.moveTaskDown(3));
         
         assertEquals("Task4", userstory.getTasks().get(4).getTitle());
         assertEquals("Task5", userstory.getTasks().get(3).getTitle());

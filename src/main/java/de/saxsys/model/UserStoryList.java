@@ -68,20 +68,15 @@ public class UserStoryList implements Model {
     /**
      * Removes one specified UserStory from the UserStoryList
      *
-     * @param title title of the UserStory to be deleted
+     * @param id the id of the UserStory to be deleted
      * @return True if removing was successful
      */
-    public boolean removeUserStory(String title) {
-        if (title != null) {
-            UserStory target = getUserStoryByTitle(title);
-            if (target != null) {
+    public boolean removeUserStory(int id) {
+        UserStory target = getUserStoryById(id);
+        if (target != null) {
                 userStories.remove(target);
                 notifyViews();
                 return true;
-            } else {
-                return false;
-            }
-
         } else {
             return false;
         }
@@ -99,11 +94,11 @@ public class UserStoryList implements Model {
     /**
      * Increases the position of a task by 1
      *
-     * @param title the title of the target to be moved
+     * @param id the id of the target to be moved
      * @return true if the movement was successful
      */
-    public boolean moveUserStoryUp(String title) {
-        UserStory target = getUserStoryByTitle(title);
+    public boolean moveUserStoryUp(int id) {
+        UserStory target = getUserStoryById(id);
 
         if (target != null) {
             int oldIndex = userStories.indexOf(target);
@@ -125,11 +120,11 @@ public class UserStoryList implements Model {
     /**
      * Decreases the position of a UserStory by 1
      *
-     * @param title title the title of the target to be moved
+     * @param id the id of the target to be moved
      * @return true if the movement was successful
      */
-    public boolean moveUserStoryDown(String title) {
-        UserStory target = getUserStoryByTitle(title);
+    public boolean moveUserStoryDown(int id) {
+        UserStory target = getUserStoryById(id);
 
         if (target != null) {
             int oldIndex = userStories.indexOf(target);
@@ -169,6 +164,20 @@ public class UserStoryList implements Model {
         }
     }
 
+
+    // For Commands
+    public UserStory getUserStoryById(int id) {
+        // find first element which title property matches the input
+        Optional<UserStory> result = userStories.stream().filter((element) -> (
+                (element.getId() == id)
+        )).findFirst();
+
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return null;
+        }
+    }
 
     // For Commands
     public UserStory getUserStoryByTitle(String title) {

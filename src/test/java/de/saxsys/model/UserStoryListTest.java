@@ -48,15 +48,15 @@ public class UserStoryListTest {
 		assertTrue(userStoryList.addUserStory(myUserStory4));
 		assertFalse(userStoryList.addUserStory(null));
 		
-		assertTrue(userStoryList.removeUserStory("myUserStory1"));
-		assertFalse(userStoryList.removeUserStory(""));		
+		assertTrue(userStoryList.removeUserStory(4));
+		assertFalse(userStoryList.removeUserStory(10));
 	}
 
 	
 	@Test
 	public void testRemoveAllUserStories()
 	{
-		List<UserStory> compareList = new ArrayList<UserStory>();
+		List<UserStory> compareList = new ArrayList<>();
 		UserStoryList compareUserStoryList 	= new UserStoryList(compareList);
 		userStoryList.removeAllUserStories(); 
 
@@ -79,19 +79,19 @@ public class UserStoryListTest {
 	@Test
 	public void testMoveUserStoryUp()
 	{
-		assertFalse(userStoryList.moveUserStoryUp("US1"));
-		assertTrue(userStoryList.moveUserStoryUp("US3"));
-		assertTrue(userStoryList.moveUserStoryUp("US4"));
-		assertFalse(userStoryList.moveUserStoryUp(null));
+		assertFalse(userStoryList.moveUserStoryUp(0));
+		assertTrue(userStoryList.moveUserStoryUp(2));
+		assertTrue(userStoryList.moveUserStoryUp(3));
+		assertFalse(userStoryList.moveUserStoryUp(10));
 	}
 	
 	@Test
 	public void testMoveUserStoryDown()
 	{
-		assertFalse(userStoryList.moveUserStoryDown("US4"));
-		assertTrue(userStoryList.moveUserStoryDown("US1"));
-		assertTrue(userStoryList.moveUserStoryDown("US3"));
-		assertFalse(userStoryList.moveUserStoryDown(null));
+		assertFalse(userStoryList.moveUserStoryDown(3));
+		assertTrue(userStoryList.moveUserStoryDown(0));
+		assertTrue(userStoryList.moveUserStoryDown(2));
+		assertFalse(userStoryList.moveUserStoryDown(10));
 	}
 	
 // Successfully tested yet

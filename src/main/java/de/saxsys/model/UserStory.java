@@ -23,7 +23,7 @@ public class UserStory implements Model {
     @JsonProperty(required = true)
     private Priority priority;
 
-    // list vor registerd views
+    // list vor registered views
     @JsonIgnore
     private Set<ActiveViewElement> registeredViews;
 
@@ -180,8 +180,8 @@ public class UserStory implements Model {
      * @param title the title of the task to be deleted
      * @return true if task was found and deleted, fasle if title wasn't found
      */
-    public boolean removeTask(String title) {
-        Task target = getTaskByTitle(title);
+    public boolean removeTask(int id) {
+        Task target = getTaskById(id);
         if (tasks.remove(target)) {
             notifyViews();
             return true;
@@ -248,13 +248,36 @@ public class UserStory implements Model {
     }
 
     /**
+     * get a Task object from the tasks list of the userstory by it's id
+     *
+     * @param id the id of the task
+     * @return the Task Object; returns null if task object is not existing
+     */
+    public Task getTaskById(int id) {
+        // find first element which title property matches the input
+        Optional<Task> result = tasks.stream().filter((element) -> {
+            if (element.getId() == id) {
+                return true;
+            } else {
+                return false;
+            }
+        }).findFirst();
+
+        if (result.isPresent()) {
+            return result.get();
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * Increases the position of a task by 1
      *
-     * @param title the title of the target to be moved
+     * @param id the id of the target to be moved
      * @return true if the movement was successsfull
      */
-    public boolean moveTaskUp(String title) {
-        Task target = getTaskByTitle(title);
+    public boolean moveTaskUp(int id) {
+        Task target = getTaskById(id);
 
         if (target != null) {
             int oldIndex = tasks.indexOf(target);
@@ -278,8 +301,8 @@ public class UserStory implements Model {
      * @param title the title of the target to be moved
      * @return true if the movement was successsfull
      */
-    public boolean moveTaskDown(String title) {
-        Task target = getTaskByTitle(title);
+    public boolean moveTaskDown(int id) {
+        Task target = getTaskById(id);
 
         if (target != null) {
             int oldIndex = tasks.indexOf(target);
