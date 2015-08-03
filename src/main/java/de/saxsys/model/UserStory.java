@@ -15,6 +15,8 @@ import java.util.*;
  */
 public class UserStory implements Model {
     @JsonProperty(required = true)
+    private final Integer id;
+    @JsonProperty(required = true)
     private String title;
     private String description = "";
     private List<Task> tasks = new ArrayList<>();
@@ -28,6 +30,7 @@ public class UserStory implements Model {
 
     //constructor for Jackson, shouldn't be used
     private UserStory() {
+        id = null;
         registeredViews = new HashSet<>();
     }
 
@@ -37,8 +40,8 @@ public class UserStory implements Model {
      * @param title    title of the new userstory
      * @param priority priority of the new userstory
      */
-    public UserStory(String title, Priority priority) {
-        this(title, priority, (String) null);
+    public UserStory(int id, String title, Priority priority) {
+        this(id, title, priority, (String) null);
     }
 
     /**
@@ -48,8 +51,8 @@ public class UserStory implements Model {
      * @param priority    priority of the new userstory
      * @param description description of the new userstory
      */
-    public UserStory(String title, Priority priority, String description) {
-        this(title, priority, null, description);
+    public UserStory(int id, String title, Priority priority, String description) {
+        this(id, title, priority, null, description);
     }
 
     /**
@@ -59,8 +62,8 @@ public class UserStory implements Model {
      * @param priority priority of the new userstory
      * @param tasks    list of tasks associated with the new userstory
      */
-    public UserStory(String title, Priority priority, List<Task> tasks) {
-        this(title, priority, tasks, null);
+    public UserStory(int id, String title, Priority priority, List<Task> tasks) {
+        this(id, title, priority, tasks, null);
     }
 
     /**
@@ -71,13 +74,18 @@ public class UserStory implements Model {
      * @param tasks       list of tasks associated with the new userstory
      * @param description description of the new userstory
      */
-    public UserStory(String title, Priority priority, List<Task> tasks, String description) {
+    public UserStory(int id, String title, Priority priority, List<Task> tasks, String description) {
+        this.id = id;
         this.tasks = new ArrayList<>();
         this.registeredViews = new HashSet<>();
         setTitle(title);
         setPriority(priority);
         addAllTasks(tasks);
         setDescription(description);
+    }
+
+    public int getId() {
+        return this.id;
     }
 
     /**
@@ -298,7 +306,7 @@ public class UserStory implements Model {
     public boolean equals(UserStory comp) {
         if (this == comp) {
             return true;
-        } else if (this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
+        } else if ( this.getId() == comp.getId() &&  this.getTitle().equals(comp.getTitle()) && this.getPriority().equals(comp.getPriority())
                 && this.getDescription().equals(comp.getDescription()) && taskListEquals(comp.getTasks())) {
             return true;
         } else {

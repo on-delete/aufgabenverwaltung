@@ -22,10 +22,10 @@ public class UserStoryListTest {
 	{
 		List<UserStory> userStories = new ArrayList<>();
 		List<Task> tasks = null;
-		userStories.add(new UserStory("US1", Priority.HIGH));
-		userStories.add(new UserStory("US2", Priority.MIDDLE, tasks));
-		userStories.add(new UserStory("US3", Priority.LOW, "Third Userstory"));
-		userStories.add(new UserStory("US4", Priority.VERY_LOW, tasks, "Fourth Userstory"));
+		userStories.add(new UserStory(0, "US1", Priority.HIGH));
+		userStories.add(new UserStory(1, "US2", Priority.MIDDLE, tasks));
+		userStories.add(new UserStory(2, "US3", Priority.LOW, "Third Userstory"));
+		userStories.add(new UserStory(3, "US4", Priority.VERY_LOW, tasks, "Fourth Userstory"));
 		
 		userStoryList = new UserStoryList(userStories);
 	}
@@ -37,10 +37,10 @@ public class UserStoryListTest {
 	@Test
 	public void testAddAndRemoveUserStory()
 	{
-		UserStory myUserStory1 = new UserStory("myUserStory1", Priority.MIDDLE);
-		UserStory myUserStory2 = new UserStory("myUserStory2", Priority.LOW);
-		UserStory myUserStory3 = new UserStory("myUserStory3", Priority.HIGH);
-		UserStory myUserStory4 = new UserStory("myUserStory4", Priority.VERY_LOW);
+		UserStory myUserStory1 = new UserStory(4, "myUserStory1", Priority.MIDDLE);
+		UserStory myUserStory2 = new UserStory(5, "myUserStory2", Priority.LOW);
+		UserStory myUserStory3 = new UserStory(6, "myUserStory3", Priority.HIGH);
+		UserStory myUserStory4 = new UserStory(7, "myUserStory4", Priority.VERY_LOW);
 		
 		assertTrue(userStoryList.addUserStory(myUserStory1));
 		assertTrue(userStoryList.addUserStory(myUserStory2));
@@ -67,8 +67,8 @@ public class UserStoryListTest {
 	public void testGetNumberOfUserStories()
 	{
 		UserStoryList test = new UserStoryList(userStories);
-		UserStory myUserStory1 = new UserStory("myUserStory1", Priority.MIDDLE);
-		UserStory myUserStory2 = new UserStory("myUserStory2", Priority.LOW);
+		UserStory myUserStory1 = new UserStory(0, "myUserStory1", Priority.MIDDLE);
+		UserStory myUserStory2 = new UserStory(1, "myUserStory2", Priority.LOW);
 		test.addUserStory(myUserStory1);
 		test.addUserStory(myUserStory2);
 		
@@ -102,10 +102,10 @@ public class UserStoryListTest {
     public void testFromJSON() throws IOException
     {
     	List<UserStory> jsonUserStories = new ArrayList<>();
-    	jsonUserStories.add(new UserStory("TestUS1", Priority.MIDDLE));
+    	jsonUserStories.add(new UserStory(0, "TestUS1", Priority.MIDDLE));
     	UserStoryList jsonList = new UserStoryList(jsonUserStories);
     	
-    	String jsonString = "{\"userStories\":[{\"title\":\"TestUS1\",\"priority\":\"MIDDLE\"}]}";
+    	String jsonString = "{\"userStories\":[{\"id\":0,\"title\":\"TestUS1\",\"priority\":\"MIDDLE\"}]}";
     	UserStoryList generated = UserStoryList.fromJson(jsonString);
     	assertTrue(jsonList.equals(generated));
     }
@@ -114,10 +114,10 @@ public class UserStoryListTest {
     public void testToJSON() throws IOException
     {
     	List<UserStory> jsonUserStories = new ArrayList<>();
-    	jsonUserStories.add(new UserStory("TestUS1", Priority.MIDDLE));
+    	jsonUserStories.add(new UserStory(0, "TestUS1", Priority.MIDDLE));
     	UserStoryList jsonList = new UserStoryList(jsonUserStories);
     	
-    	String jsonString = "{\"userStories\":[{\"title\":\"TestUS1\",\"description\":\"\",\"tasks\":[],\"priority\":\"MIDDLE\"}]}";
+    	String jsonString = "{\"userStories\":[{\"id\":0,\"title\":\"TestUS1\",\"description\":\"\",\"tasks\":[],\"priority\":\"MIDDLE\"}]}";
     	String generated = new String(jsonList.toJson());
     	assertEquals(jsonString, generated);
     }
@@ -127,7 +127,7 @@ public class UserStoryListTest {
     {
     	List<UserStory> list1 = new ArrayList<>();
     	List<UserStory> list2 = new ArrayList<>();
-    	UserStory userStory = new UserStory("UserStoryTitle", Priority.MIDDLE);
+    	UserStory userStory = new UserStory(0, "UserStoryTitle", Priority.MIDDLE);
     	list2.add(userStory);
     	UserStoryList userStoryList1 = new UserStoryList(list1);
     	UserStoryList userStoryList2 = new UserStoryList(list1);
