@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GlobalController implements GlobalController, EventHandler<ActionEvent> {
+public class GlobalController implements EventHandler<ActionEvent> {
     UserStoryList globalModelInstance;
 
     public GlobalController() {
@@ -40,7 +40,6 @@ public class GlobalController implements GlobalController, EventHandler<ActionEv
         globalModelInstance.addUserStory(story2);
     }
 
-    @Override
     public UserStoryList getGlobalModelInstance() {
         return globalModelInstance;
     }
@@ -62,7 +61,7 @@ public class GlobalController implements GlobalController, EventHandler<ActionEv
     }
 
     private int getUserStoryId(String viewId) {
-        return Integer.valueOf(viewId.substring(viewId.indexOf("story-") + "story-".length(), viewId.indexOf("_view")));
+        return Integer.valueOf(viewId.substring(viewId.indexOf("story-") + "story-".length(), viewId.indexOf("_title")));
     }
 
     private ButtonType getButtonType(String buttonId) {

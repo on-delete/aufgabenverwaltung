@@ -1,8 +1,6 @@
 package de.saxsys.gui.view;
 
-import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.gui.controller.GlobalController;
-import de.saxsys.gui.controller.GlobalMockController;
 import de.saxsys.model.UserStory;
 import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;
@@ -11,15 +9,19 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 public class TaskManagementTablePane extends VBox implements ActiveViewElement {
+    private GlobalController globalController;
+
     private UserStoryList globalModelInstance;
 
     private DoubleBinding columnWidth;
 
     public TaskManagementTablePane(ReadOnlyDoubleProperty topWidth) {
 
-        //create a global controller and get the global model instance
-        GlobalController controller = new GlobalMockController();
-        globalModelInstance = controller.getGlobalModelInstance();
+        //create global controller
+        globalController = new GlobalController();
+        globalModelInstance = globalController.getGlobalModelInstance();
+
+        //register to global model instance
         globalModelInstance.registerView(this);
 
         columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
@@ -38,11 +40,9 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     }
 
     private void setUserstories() {
-        //create an Expandable controller which is used in every Expandable Element in the application (gets handed down through the hierarchie)
-        ExpendableController expansionController = new ExpendableController();
         for (UserStory story : globalModelInstance.getUserStories()) {
-            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth, expansionController); //create a userstory view element and hand down the width of each column
-            view.setId(story.getTitle() + "_story");
+            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth, globalController); //create a userstory view element and hand down the width of each column and the global model instance
+            view.setId("story-" + story.getId() + "_view");
 
             getChildren().add(view);
         }

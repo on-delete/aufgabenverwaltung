@@ -1,6 +1,7 @@
 package de.saxsys.gui.view;
 
 import de.saxsys.gui.controller.ExpendableController;
+import de.saxsys.gui.controller.GlobalController;
 import de.saxsys.model.UserStory;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -11,11 +12,14 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
 public class TaskManagementUserStoryTitleView extends VBox implements Expandable {
-    UserStory story;
     ExpendableController expansionController;
+    GlobalController globalController;
 
-    public TaskManagementUserStoryTitleView(UserStory story, ExpendableController expansionController) {
-        this.story = story;
+    UserStory modelStory;
+
+    public TaskManagementUserStoryTitleView(UserStory modelStory, ExpendableController expansionController, GlobalController globalController) {
+        this.globalController = globalController;
+        this.modelStory = modelStory;
         this.expansionController = expansionController;
 
         //build view
@@ -25,23 +29,26 @@ public class TaskManagementUserStoryTitleView extends VBox implements Expandable
     private void setSimpleView() {
         HBox simpleView = new HBox();
 
-        Hyperlink storyTitle = new Hyperlink(story.getTitle());
-        storyTitle.setId("userstory_" + story.getTitle() + "_title_button");
+        Hyperlink storyTitle = new Hyperlink("#U-" + modelStory.getId() + ": " + modelStory.getTitle());
+        storyTitle.setId("story-" + modelStory.getId() + "_title_link");
         storyTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 
         Button moveUpButton = new Button("Move Up");
-        moveUpButton.setId("userstory_" + story.getTitle() + "_moveup_button");
+        moveUpButton.setId("story-" + modelStory.getId() + "_moveup_button");
+        moveUpButton.addEventHandler(ActionEvent.ACTION, globalController);
 
         Button moveDownButton = new Button("Move Down");
-        moveDownButton.setId("userstory_" + story.getTitle() + "_movedown_button");
+        moveDownButton.setId("story-" + modelStory.getId() + "_movedown_button");
+        moveDownButton.addEventHandler(ActionEvent.ACTION, globalController);
 
 
         Button moveRightButton = new Button("Add Task");
-        moveRightButton.setId("userstory_" + story.getTitle() + "_addtask_button");
+        moveRightButton.setId("story-" + modelStory.getId() + "_addtask_button");
 
 
         Button deleteButton = new Button("Delete");
-        deleteButton.setId("userstory_" + story.getTitle() + "_delete_button");
+        deleteButton.setId("story-" + modelStory.getId() + "_delete_button");
+        deleteButton.addEventHandler(ActionEvent.ACTION, globalController);
 
 
         simpleView.getChildren().addAll(storyTitle, moveDownButton, moveUpButton, deleteButton, moveRightButton);
@@ -54,16 +61,16 @@ public class TaskManagementUserStoryTitleView extends VBox implements Expandable
             GridPane detailedView = new GridPane();
 
             Text priorityText = new Text("Priority");
-            priorityText.setId("userstorz_" + story.getTitle() + "_priority_text");
-            Text priorityValue = new Text(PriorityNames.PRIORITY_NAMES.get(story.getPriority()));
-            priorityText.setId("userstorz_" + story.getTitle() + "_priority_value");
+            priorityText.setId("story-" + modelStory.getId() + "_priority_text");
+            Text priorityValue = new Text(PriorityNames.PRIORITY_NAMES.get(modelStory.getPriority()));
+            priorityText.setId("story-" + modelStory.getId() + "_priority_value");
             detailedView.add(priorityText, 0, 0);
             detailedView.add(priorityValue, 1, 0);
 
             Text descriptionText = new Text("Description");
-            descriptionText.setId("userstorz_" + story.getTitle() + "_description_text");
-            Text descriptionValue = new Text(story.getDescription());
-            descriptionText.setId("userstorz_" + story.getTitle() + "_description_value");
+            descriptionText.setId("story-" + modelStory.getId() + "_description_text");
+            Text descriptionValue = new Text(modelStory.getDescription());
+            descriptionText.setId("story-" + modelStory.getId() + "_description_value");
             detailedView.add(descriptionText, 0, 1);
             detailedView.add(descriptionValue, 1, 1);
 

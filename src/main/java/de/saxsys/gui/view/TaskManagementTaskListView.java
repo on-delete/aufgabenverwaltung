@@ -1,7 +1,9 @@
 package de.saxsys.gui.view;
 
 import de.saxsys.gui.controller.ExpendableController;
+import de.saxsys.gui.controller.UserStoryController;
 import de.saxsys.model.Task;
+import de.saxsys.model.UserStory;
 import javafx.beans.binding.DoubleBinding;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
@@ -10,12 +12,20 @@ import javafx.scene.layout.VBox;
 import java.util.List;
 
 public class TaskManagementTaskListView extends ListView<VBox> {
-    DoubleBinding listWidth;
-    List<Task> tasks;
+    UserStory topUserStoryModel;
+
+    UserStoryController userStoryController;
     ExpendableController expansionController;
 
-    public TaskManagementTaskListView(List<Task> tasks, DoubleBinding listWidth, ExpendableController expansionController) {
+    List<Task> tasks;
+
+    DoubleBinding listWidth;
+
+    public TaskManagementTaskListView(List<Task> tasks, DoubleBinding listWidth, UserStory topUserStoryModel, UserStoryController userStoryController, ExpendableController expansionController) {
+        this.userStoryController = userStoryController;
         this.expansionController = expansionController;
+
+        this.topUserStoryModel = topUserStoryModel;
 
         this.listWidth = listWidth;
         this.setPrefWidth(listWidth.get());
@@ -30,8 +40,8 @@ public class TaskManagementTaskListView extends ListView<VBox> {
 
     private void setTasks() {
         for (Task task : tasks) {
-            TaskManagementTaskView taskView = new TaskManagementTaskView(task, expansionController);
-            taskView.setId(task.getTitle() + "_view");
+            TaskManagementTaskView taskView = new TaskManagementTaskView(task, topUserStoryModel, userStoryController, expansionController);
+            taskView.setId("story-" + topUserStoryModel.getId() + "task-" + task.getId() + "_view");
             getItems().add(taskView);
         }
     }
