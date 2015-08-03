@@ -33,9 +33,12 @@ public class Server extends AbstractVerticle{
 	}
 
 	private void epicserviceInit(){
-		router.route(HttpMethod.POST, "/epicservice/addTask").handler(routingContext -> {
-			JsonObject request = routingContext.getBodyAsJson();
-			eventBus.send("addTask", request, result -> sendResponseWithoutBody(result, routingContext));
+		router.route(HttpMethod.POST, "/epicservice/addTask/:userstoryid/:order").handler(routingContext -> {
+			String userstoryId = routingContext.request().getParam("userstoryid");
+			String order = routingContext.request().getParam("order");
+			String request = routingContext.getBodyAsString();
+			String requestString = "{\"request\":{"+request+"}, \"userstoryid\":{"+userstoryId+", \"order\":{"+order+"}}";
+			eventBus.send("addTask", requestString, result -> sendResponseWithBody(result, routingContext));
 		});
 		router.route(HttpMethod.PUT, "/epicservice/updateTask").handler(routingContext -> {
 			JsonObject request = routingContext.getBodyAsJson();
@@ -50,9 +53,11 @@ public class Server extends AbstractVerticle{
 			eventBus.send("getTask", taskid, result -> sendResponseWithBody(result, routingContext));
 		});
 
-		router.route(HttpMethod.POST, "/epicservice/addUserstory").handler(routingContext -> {
-			JsonObject request = routingContext.getBodyAsJson();
-			eventBus.send("addUserstory", request, result -> sendResponseWithoutBody(result, routingContext));
+		router.route(HttpMethod.POST, "/epicservice/addUserstory/:order").handler(routingContext -> {
+			String order = routingContext.request().getParam("order");
+			String request = routingContext.getBodyAsString();
+			String requestString = "{\"request\":{"+request+"}, \"order\":{"+order+"}}";
+			eventBus.send("addUserstory", requestString, result -> sendResponseWithBody(result, routingContext));
 		});
 		router.route(HttpMethod.PUT, "/epicservice/updateUserstory").handler(routingContext -> {
 			JsonObject request = routingContext.getBodyAsJson();

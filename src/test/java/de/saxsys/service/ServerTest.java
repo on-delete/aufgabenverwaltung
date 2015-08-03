@@ -1,4 +1,4 @@
-package de.saxsys.server;
+package de.saxsys.service;
 
 import de.saxsys.service.Server;
 import io.vertx.core.Vertx;
