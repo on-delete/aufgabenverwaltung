@@ -2,6 +2,7 @@ package de.saxsys.gui.view;
 
 import de.saxsys.gui.controller.ExpendableController;
 import de.saxsys.gui.controller.GlobalController;
+import de.saxsys.gui.controller.UserStoryController;
 import de.saxsys.model.UserStory;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -14,13 +15,15 @@ import javafx.scene.text.Text;
 public class TaskManagementUserStoryTitleView extends VBox implements Expandable {
     ExpendableController expansionController;
     GlobalController globalController;
+    UserStoryController userStoryController;
 
     UserStory modelStory;
 
-    public TaskManagementUserStoryTitleView(UserStory modelStory, ExpendableController expansionController, GlobalController globalController) {
+    public TaskManagementUserStoryTitleView(UserStory modelStory, ExpendableController expansionController, GlobalController globalController, UserStoryController userStoryController) {
         this.globalController = globalController;
         this.modelStory = modelStory;
         this.expansionController = expansionController;
+        this.userStoryController = userStoryController;
 
         //build view
         setSimpleView();
@@ -42,16 +45,16 @@ public class TaskManagementUserStoryTitleView extends VBox implements Expandable
         moveDownButton.addEventHandler(ActionEvent.ACTION, globalController);
 
 
-        Button moveRightButton = new Button("Add Task");
-        moveRightButton.setId("story-" + modelStory.getId() + "_addtask_button");
-
+        Button addTaskButton = new Button("Add Task");
+        addTaskButton.setId("story-" + modelStory.getId() + "_addtask_button");
+        addTaskButton.addEventHandler(ActionEvent.ACTION, userStoryController);
 
         Button deleteButton = new Button("Delete");
         deleteButton.setId("story-" + modelStory.getId() + "_delete_button");
         deleteButton.addEventHandler(ActionEvent.ACTION, globalController);
 
 
-        simpleView.getChildren().addAll(storyTitle, moveDownButton, moveUpButton, deleteButton, moveRightButton);
+        simpleView.getChildren().addAll(storyTitle, moveDownButton, moveUpButton, deleteButton, addTaskButton);
         getChildren().add(simpleView);
     }
 

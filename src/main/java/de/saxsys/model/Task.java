@@ -129,6 +129,14 @@ public class Task implements Model {
     }
 
     /**
+     * sets the id of the task object
+     * @param id the id
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
      * Increase task status in the Task object
      */
     public void setDescription(String description) {

@@ -33,7 +33,7 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement, E
     private void setSimpleView() {
         HBox simpleView = new HBox();
 
-        Hyperlink taskTitle = new Hyperlink(taskModel.getTitle());
+        Hyperlink taskTitle = new Hyperlink("#T-" + taskModel.getId() + ": " + taskModel.getTitle());
         taskTitle.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_title_button");
         taskTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 

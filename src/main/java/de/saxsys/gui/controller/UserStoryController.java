@@ -1,5 +1,6 @@
 package de.saxsys.gui.controller;
 
+import de.saxsys.gui.view.TaskManagementAddTaskView;
 import de.saxsys.gui.view.TaskManagementTaskView;
 import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
 import de.saxsys.model.UserStory;
@@ -8,10 +9,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 
 public class UserStoryController implements EventHandler<ActionEvent> {
-    private final UserStory storyModel;
+    private final UserStory userStoryModel;
 
-    public UserStoryController(UserStory storyModel) {
-        this.storyModel = storyModel;
+    public UserStoryController(UserStory userStoryModel) {
+        this.userStoryModel = userStoryModel;
     }
 
     @Override
@@ -19,19 +20,28 @@ public class UserStoryController implements EventHandler<ActionEvent> {
         if (event.getEventType().equals(ActionEvent.ACTION)) {
             if (event.getSource() instanceof Button) {
                 Button source = (Button) event.getSource();
-                if ( (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_addview_button") ) {
-                    //:TODO implement add Task
+                if ( (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_addtask_button") ) {
+                    handleAddTask();
                 } else if ( (source.getParent().getParent() instanceof TaskManagementTaskView) ) {
-                    int taskId = getTaskId(source.getParent().getParent().getId());
-                    switch (getButtonType(source.getId())) {
-                        case TASK_MOVEUP: storyModel.moveTaskUp(taskId); break;
-                        case TASK_MOVEDOWN: storyModel.moveTaskDown(taskId); break;
-                        case TASK_DELETE: storyModel.removeTask(taskId); break;
-                        case TASK_MOVERIGHT: storyModel.getTaskById(taskId).increaseStatus(); storyModel.notifyViews(); break;
-                    }
+                    handleTaskOperations(source);
                 }
             }
         }
+    }
+
+    private void handleTaskOperations(Button source) {
+        int taskId = getTaskId(source.getParent().getParent().getId());
+        switch (getButtonType(source.getId())) {
+            case TASK_MOVEUP: userStoryModel.moveTaskUp(taskId); break;
+            case TASK_MOVEDOWN: userStoryModel.moveTaskDown(taskId); break;
+            case TASK_DELETE: userStoryModel.removeTask(taskId); break;
+            case TASK_MOVERIGHT: userStoryModel.getTaskById(taskId).increaseStatus(); userStoryModel.notifyViews(); break;
+        }
+    }
+
+    private void handleAddTask() {
+        AddTaskController addTaskController = new AddTaskController(userStoryModel);
+        TaskManagementAddTaskView addView = new TaskManagementAddTaskView(addTaskController);
     }
 
     private ButtonType getButtonType(String buttonId) {

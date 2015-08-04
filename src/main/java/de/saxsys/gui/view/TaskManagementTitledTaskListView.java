@@ -42,7 +42,7 @@ public class TaskManagementTitledTaskListView extends VBox {
     }
 
     private void setUserstory() {
-        TaskManagementUserStoryTitleView userStoryTitleView = new TaskManagementUserStoryTitleView(modelStory, expansionController, globalController);
+        TaskManagementUserStoryTitleView userStoryTitleView = new TaskManagementUserStoryTitleView(modelStory, expansionController, globalController, userStoryController);
         userStoryTitleView.setId("story-" + modelStory.getId() + "_title_view");
         getChildren().add(userStoryTitleView);
     }
