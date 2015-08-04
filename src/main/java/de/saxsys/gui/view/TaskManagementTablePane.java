@@ -5,6 +5,7 @@ import de.saxsys.model.UserStory;
 import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
@@ -51,6 +52,7 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     private void setAddButton() {
         Button addButton = new Button("Add UserStory");
         addButton.setId("add_userstory_button");
+        addButton.addEventHandler(ActionEvent.ACTION, globalController);
         getChildren().add(addButton);
     }
 

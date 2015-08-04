@@ -15,7 +15,7 @@ import java.util.*;
  */
 public class UserStory implements Model {
     @JsonProperty(required = true)
-    private final Integer id;
+    private Integer id;
     @JsonProperty(required = true)
     private String title;
     private String description = "";
@@ -86,6 +86,14 @@ public class UserStory implements Model {
 
     public int getId() {
         return this.id;
+    }
+
+    /**
+     * sets the id of the UserStory object
+     * @param id the new id
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

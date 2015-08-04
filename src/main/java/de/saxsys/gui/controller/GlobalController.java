@@ -1,5 +1,7 @@
 package de.saxsys.gui.controller;
 
+import de.saxsys.gui.view.TaskManagementAddUserStoryView;
+import de.saxsys.gui.view.TaskManagementTablePane;
 import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
 import de.saxsys.model.Priority;
 import de.saxsys.model.Task;
@@ -46,16 +48,12 @@ public class GlobalController implements EventHandler<ActionEvent> {
 
     @Override
     public void handle(ActionEvent event) {
-        if (event.getEventType().equals(ActionEvent.ACTION)) {
-            if ((event.getSource() instanceof Button) && (((Button) event.getSource()).getParent().getParent() instanceof TaskManagementUserStoryTitleView)) {
-                int storyId = getUserStoryId(((Button) event.getSource()).getParent().getParent().getId());
-
-                switch (getButtonType(((Button) event.getSource()).getId())) {
-                    case USERSTORY_MOVEUP: globalModelInstance.moveUserStoryUp(storyId); break;
-                    case USERSTORY_MOVEDOWN: globalModelInstance.moveUserStoryDown(storyId); break;
-                    case USERSTORY_DELETE: globalModelInstance.removeUserStory(storyId); break;
-                    //ADDTASK is handled by another controller
-                }
+        if (event.getEventType().equals(ActionEvent.ACTION) && (event.getSource() instanceof Button)) {
+            Button source = (Button) event.getSource();
+            if (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) {
+                handleUserStoryOperations(source);
+            } else if (source.getParent() instanceof TaskManagementTablePane && source.getId().equals("add_userstory_button")) {
+                handleAddUserStory();
             }
         }
     }
@@ -76,5 +74,21 @@ public class GlobalController implements EventHandler<ActionEvent> {
         } else {
             throw new IllegalArgumentException("Incorrect source button");
         }
+    }
+
+    private void handleUserStoryOperations(Button source) {
+        int storyId = getUserStoryId(source.getParent().getParent().getId());
+
+        switch (getButtonType(source.getId())) {
+            case USERSTORY_MOVEUP: globalModelInstance.moveUserStoryUp(storyId); break;
+            case USERSTORY_MOVEDOWN: globalModelInstance.moveUserStoryDown(storyId); break;
+            case USERSTORY_DELETE: globalModelInstance.removeUserStory(storyId); break;
+            //ADDTASK is handled by UserStoryController
+        }
+    }
+
+    private void handleAddUserStory() {
+        AddUserStoryController addUserStoryController = new AddUserStoryController(globalModelInstance);
+        TaskManagementAddUserStoryView addUserStoryView = new TaskManagementAddUserStoryView(addUserStoryController);
     }
 }
