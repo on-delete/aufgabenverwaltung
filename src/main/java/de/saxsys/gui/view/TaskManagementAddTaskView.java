@@ -55,7 +55,7 @@ public class TaskManagementAddTaskView extends Stage{
         RadioButton lowRadio = new RadioButton("Low");
         lowRadio.setId("addtask_priority_low_radio");
         lowRadio.setToggleGroup(priorityGroup);
-        RadioButton veryLowRadio = new RadioButton("High");
+        RadioButton veryLowRadio = new RadioButton("Very Low");
         veryLowRadio.setId("addtask_priority_veryLow_radio");
         veryLowRadio.setToggleGroup(priorityGroup);
         VBox radioView = new VBox();

@@ -72,7 +72,7 @@ public class AddTaskController implements EventHandler<ActionEvent> {
         if (mainView.lookup("#addtask_priority_view") instanceof VBox) {
             VBox priorityRadioView = (VBox) mainView.lookup("#addtask_priority_view");
 
-            Optional<Priority> choosen = priorityRadioView.getChildren().stream()
+            Optional<Priority> chosen = priorityRadioView.getChildren().stream()
                     .filter((element) -> {
                         if (element instanceof RadioButton) {
                             RadioButton radioElement = (RadioButton) element;
@@ -96,7 +96,7 @@ public class AddTaskController implements EventHandler<ActionEvent> {
                     })
                     .findFirst();
 
-            return choosen.get();
+            return chosen.get();
         } else {
             throw new IllegalArgumentException("Incorrect parent pane");
         }
