@@ -11,7 +11,7 @@ public class RowTitles {
     static {
         Map<Status, String> tempMap = new HashMap<>();
         tempMap.put(Status.TODO, "Todo");
-        tempMap.put(Status.IN_PROGRESS, "InProgress");
+        tempMap.put(Status.IN_PROGRESS, "In Progress");
         tempMap.put(Status.DONE, "Done");
 
         ROW_TITLES = Collections.unmodifiableMap(tempMap);
