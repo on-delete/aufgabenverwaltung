@@ -63,13 +63,13 @@ public class UserStoryTest {
     public void testGetTask() {
         Task testTask = new Task(1, "Task2", Priority.HIGH);
 
-        assertTrue(testTask.equals(userstory.getTaskByTitle("Task2")));
+        assertTrue(testTask.equals(userstory.getTaskById(1)));
     }
     
     @Test
     public void testAddTask() {
         assertTrue(userstory.addTask(new Task(5, "Task6", Priority.HIGH))); //adding new task
-        assertNotNull(userstory.getTaskByTitle("Task6"));
+        assertNotNull(userstory.getTaskById(5));
         
         assertFalse(userstory.addTask(new Task(5, "Task6", Priority.HIGH))); //adding task that allready exists
     } 
@@ -82,15 +82,15 @@ public class UserStoryTest {
         tasks.add(new Task(6, "Task7", Priority.VERY_LOW)); //adding new task
         
         assertEquals(2, userstory.addAllTasks(tasks));
-        assertNotNull(userstory.getTaskByTitle("Task6"));
-        assertNotNull(userstory.getTaskByTitle("Task7"));
+        assertNotNull(userstory.getTaskById(5));
+        assertNotNull(userstory.getTaskById(6));
     }
     
     @Test
     public void testRemoveTask() {
         assertTrue(userstory.removeTask(3));
 
-        assertNull(userstory.getTaskByTitle("Task4"));
+        assertNull(userstory.getTaskById(3));
     }
 
     @Test

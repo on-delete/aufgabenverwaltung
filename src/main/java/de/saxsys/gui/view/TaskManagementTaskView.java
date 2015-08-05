@@ -21,6 +21,7 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement, E
 
     public TaskManagementTaskView(Task taskModel, UserStory topUserStoryModel, UserStoryController userStoryController, ExpendableController expansionController) {
         this.taskModel = taskModel;
+        this.taskModel.registerView(this);
         this.topUserStoryModel = topUserStoryModel;
 
         this.userStoryController = userStoryController;
@@ -82,6 +83,11 @@ public class TaskManagementTaskView extends VBox implements ActiveViewElement, E
             inChargeText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_inCharge_value");
             detailedView.add(inChargeText, 0, 2);
             detailedView.add(inChargeValue, 1, 2);
+
+            Button editButton = new Button("Edit");
+            editButton.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_edit_button");
+            editButton.addEventHandler(ActionEvent.ACTION, userStoryController);
+            detailedView.add(editButton, 0, 3);
 
             getChildren().add(detailedView);
         } else {

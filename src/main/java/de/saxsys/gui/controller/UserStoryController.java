@@ -1,6 +1,7 @@
 package de.saxsys.gui.controller;
 
 import de.saxsys.gui.view.TaskManagementAddTaskView;
+import de.saxsys.gui.view.TaskManagementEditUserStoryView;
 import de.saxsys.gui.view.TaskManagementTaskView;
 import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
 import de.saxsys.model.UserStory;
@@ -22,8 +23,12 @@ public class UserStoryController implements EventHandler<ActionEvent> {
                 Button source = (Button) event.getSource();
                 if ( (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_addtask_button") ) {
                     handleAddTask();
-                } else if ( (source.getParent().getParent() instanceof TaskManagementTaskView) ) {
+                } else if ( (source.getParent().getParent() instanceof TaskManagementTaskView) && !source.getId().contains("_edit_button")) {
                     handleTaskOperations(source);
+                } else if ((source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_edit_button")) {
+                    handleEditUserStory();
+                } else if ((source.getParent().getParent() instanceof TaskManagementTaskView) && source.getId().contains("_edit_button")) {
+                    handleEditTask(source);
                 }
             }
         }
@@ -42,6 +47,17 @@ public class UserStoryController implements EventHandler<ActionEvent> {
     private void handleAddTask() {
         AddTaskController addTaskController = new AddTaskController(userStoryModel);
         TaskManagementAddTaskView addView = new TaskManagementAddTaskView(addTaskController);
+    }
+
+    private void handleEditUserStory() {
+        EditUserStoryController editUserStoryController = new EditUserStoryController(userStoryModel);
+        TaskManagementEditUserStoryView editView = new TaskManagementEditUserStoryView(editUserStoryController, userStoryModel);
+    }
+
+    private void handleEditTask(Button source) {
+        int taskId = getTaskId(source.getParent().getParent().getId());
+        EditTaskController editTaskController = new EditTaskController(userStoryModel.getTaskById(taskId));
+        TaskManagementEditTaskView editView = new TaskManagementEditTaskView(editTaskController, userStoryModel.getTaskById(taskId));
     }
 
     private ButtonType getButtonType(String buttonId) {

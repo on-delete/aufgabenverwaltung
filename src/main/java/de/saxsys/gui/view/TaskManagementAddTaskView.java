@@ -33,7 +33,7 @@ public class TaskManagementAddTaskView extends Stage{
         titleField.setId("addtask_title_field");
         mainView.add(titleField, 1, 0);
 
-        Label descriptionLabel = new Label("Title");
+        Label descriptionLabel = new Label("Description");
         descriptionLabel.setId("addtask_description_label");
         mainView.add(descriptionLabel, 0, 1);
         TextArea descriptionField = new TextArea();
@@ -48,10 +48,10 @@ public class TaskManagementAddTaskView extends Stage{
         RadioButton highRadio = new RadioButton("High");
         highRadio.setId("addtask_priority_high_radio");
         highRadio.setToggleGroup(priorityGroup);
-        RadioButton mediumRadio = new RadioButton("Middle");
-        mediumRadio.setId("addtask_priority_middle_radio");
-        mediumRadio.setSelected(true);
-        mediumRadio.setToggleGroup(priorityGroup);
+        RadioButton middleRadio = new RadioButton("Middle");
+        middleRadio.setId("addtask_priority_middle_radio");
+        middleRadio.setSelected(true);
+        middleRadio.setToggleGroup(priorityGroup);
         RadioButton lowRadio = new RadioButton("Low");
         lowRadio.setId("addtask_priority_low_radio");
         lowRadio.setToggleGroup(priorityGroup);
@@ -60,7 +60,7 @@ public class TaskManagementAddTaskView extends Stage{
         veryLowRadio.setToggleGroup(priorityGroup);
         VBox radioView = new VBox();
         radioView.setId("addtask_priority_view");
-        radioView.getChildren().addAll(highRadio, mediumRadio, lowRadio, veryLowRadio);
+        radioView.getChildren().addAll(highRadio, middleRadio, lowRadio, veryLowRadio);
         mainView.add(radioView, 1, 2);
 
         Button addTaskButton = new Button("Add Task");

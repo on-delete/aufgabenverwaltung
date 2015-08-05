@@ -183,9 +183,9 @@ public class UserStory implements Model {
     }
 
     /**
-     * Deletes the Task object with the given title from the task list
+     * Deletes the Task object with the given id from the task list
      *
-     * @param title the title of the task to be deleted
+     * @param id the id of the task to be deleted
      * @return true if task was found and deleted, fasle if title wasn't found
      */
     public boolean removeTask(int id) {
@@ -205,7 +205,7 @@ public class UserStory implements Model {
      * @return true if task was added, false if task was not added (allready existing)
      */
     public boolean addTask(Task input) {
-        if (input != null && getTaskByTitle(input.getTitle()) == null) {
+        if (input != null && getTaskById(input.getId()) == null) {
             this.tasks.add(input);
             notifyViews();
             return true;
@@ -230,29 +230,6 @@ public class UserStory implements Model {
             }
         }
         return added;
-    }
-
-    /**
-     * get a Task object from the tasks list of the userstory by it's title
-     *
-     * @param title the title of the task
-     * @return the Task Object; returns null if task object is not existing
-     */
-    public Task getTaskByTitle(String title) {
-        // find first element which title property matches the input
-        Optional<Task> result = tasks.stream().filter((element) -> {
-            if (element.getTitle().equals(title)) {
-                return true;
-            } else {
-                return false;
-            }
-        }).findFirst();
-
-        if (result.isPresent()) {
-            return result.get();
-        } else {
-            return null;
-        }
     }
 
     /**
@@ -306,7 +283,7 @@ public class UserStory implements Model {
     /**
      * Decreases the position of a task by 1
      *
-     * @param title the title of the target to be moved
+     * @param id the id of the target to be moved
      * @return true if the movement was successsfull
      */
     public boolean moveTaskDown(int id) {

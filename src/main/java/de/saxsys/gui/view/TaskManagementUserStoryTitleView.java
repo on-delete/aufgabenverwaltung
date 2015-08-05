@@ -51,7 +51,7 @@ public class TaskManagementUserStoryTitleView extends VBox implements Expandable
 
         Button deleteButton = new Button("Delete");
         deleteButton.setId("story-" + modelStory.getId() + "_delete_button");
-        deleteButton.addEventHandler(ActionEvent.ACTION, globalController);
+        deleteButton.addEventHandler(ActionEvent.ACTION, userStoryController);
 
 
         simpleView.getChildren().addAll(storyTitle, moveDownButton, moveUpButton, deleteButton, addTaskButton);
@@ -76,6 +76,11 @@ public class TaskManagementUserStoryTitleView extends VBox implements Expandable
             descriptionText.setId("story-" + modelStory.getId() + "_description_value");
             detailedView.add(descriptionText, 0, 1);
             detailedView.add(descriptionValue, 1, 1);
+
+            Button editButton = new Button("Edit");
+            editButton.setId("story-" + modelStory.getId() + "_edit_button");
+            editButton.addEventHandler(ActionEvent.ACTION, userStoryController);
+            detailedView.add(editButton, 0, 2);
 
             getChildren().add(detailedView);
         } else {

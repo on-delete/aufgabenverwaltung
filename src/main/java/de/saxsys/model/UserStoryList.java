@@ -55,7 +55,7 @@ public class UserStoryList implements Model {
      * @return True if adding was successful
      */
     public boolean addUserStory(UserStory userStory) {
-        if (userStory != null && getUserStoryByTitle(userStory.getTitle()) == null) {
+        if (userStory != null && getUserStoryById(userStory.getId()) == null) {
             this.userStories.add(userStory);
             notifyViews();
             return true;
@@ -170,20 +170,6 @@ public class UserStoryList implements Model {
         // find first element which title property matches the input
         Optional<UserStory> result = userStories.stream().filter((element) -> (
                 (element.getId() == id)
-        )).findFirst();
-
-        if (result.isPresent()) {
-            return result.get();
-        } else {
-            return null;
-        }
-    }
-
-    // For Commands
-    public UserStory getUserStoryByTitle(String title) {
-        // find first element which title property matches the input
-        Optional<UserStory> result = userStories.stream().filter((element) -> (
-                (element.getTitle().equals(title))
         )).findFirst();
 
         if (result.isPresent()) {
