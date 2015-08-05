@@ -2,7 +2,7 @@ package de.saxsys.gui;
 
 //import de.saxsys.server.AddTaskVerticle;
 
-import de.saxsys.gui.view.TaskManagementRootPane;
+import de.saxsys.gui.view.RootPane;
 import io.vertx.core.Vertx;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -31,7 +31,7 @@ public class MainApplication extends Application{
         vertx.deployVerticle(new InitDatabaseVerticle());*/
         
 		//GUI
-	    TaskManagementRootPane root = new TaskManagementRootPane(); //create the top pane of the application
+	    RootPane root = new RootPane(); //create the top pane of the application
 	    root.setId("root");
 	    
 	    Scene primaryScene = new Scene(root);

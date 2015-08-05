@@ -6,12 +6,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class TaskManagementHeadingView extends HBox {
+public class HeadingView extends HBox {
 
     DoubleBinding columnWith;
     Double textWidth;
 
-    public TaskManagementHeadingView(DoubleBinding columnWith) {
+    public HeadingView(DoubleBinding columnWith) {
 
         this.columnWith = columnWith;
         textWidth = columnWith.get();

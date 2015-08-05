@@ -1,8 +1,8 @@
 package de.saxsys.gui.controller;
 
-import de.saxsys.gui.view.TaskManagementAddUserStoryView;
-import de.saxsys.gui.view.TaskManagementTablePane;
-import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
+import de.saxsys.gui.view.AddUserStoryView;
+import de.saxsys.gui.view.TablePane;
+import de.saxsys.gui.view.TitleView;
 import de.saxsys.model.Priority;
 import de.saxsys.model.Task;
 import de.saxsys.model.UserStory;
@@ -50,9 +50,9 @@ public class GlobalController implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
         if (event.getEventType().equals(ActionEvent.ACTION) && (event.getSource() instanceof Button)) {
             Button source = (Button) event.getSource();
-            if (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) {
+            if (source.getParent().getParent() instanceof TitleView) {
                 handleUserStoryOperations(source);
-            } else if (source.getParent() instanceof TaskManagementTablePane && source.getId().equals("add_userstory_button")) {
+            } else if (source.getParent() instanceof TablePane && source.getId().equals("add_userstory_button")) {
                 handleAddUserStory();
             }
         }
@@ -89,6 +89,6 @@ public class GlobalController implements EventHandler<ActionEvent> {
 
     private void handleAddUserStory() {
         AddUserStoryController addUserStoryController = new AddUserStoryController(globalModelInstance);
-        TaskManagementAddUserStoryView addUserStoryView = new TaskManagementAddUserStoryView(addUserStoryController);
+        AddUserStoryView addUserStoryView = new AddUserStoryView(addUserStoryController);
     }
 }

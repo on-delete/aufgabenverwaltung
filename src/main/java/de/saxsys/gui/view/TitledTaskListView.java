@@ -11,7 +11,7 @@ import javafx.scene.layout.VBox;
 
 import java.util.List;
 
-public class TaskManagementTitledTaskListView extends VBox {
+public class TitledTaskListView extends VBox {
     ExpendableController expansionController;
     GlobalController globalController;
     UserStoryController userStoryController;
@@ -21,7 +21,7 @@ public class TaskManagementTitledTaskListView extends VBox {
 
     DoubleBinding listWidth;
 
-    public TaskManagementTitledTaskListView(UserStory modelStory, List<Task> tasks, DoubleBinding listWidth, UserStoryController userStoryController, ExpendableController expansionController, GlobalController globalController) {
+    public TitledTaskListView(UserStory modelStory, List<Task> tasks, DoubleBinding listWidth, UserStoryController userStoryController, ExpendableController expansionController, GlobalController globalController) {
         this.globalController = globalController;
         this.expansionController = expansionController;
         this.userStoryController = userStoryController;
@@ -42,13 +42,13 @@ public class TaskManagementTitledTaskListView extends VBox {
     }
 
     private void setUserstory() {
-        TaskManagementUserStoryTitleView userStoryTitleView = new TaskManagementUserStoryTitleView(modelStory, expansionController, globalController, userStoryController);
+        TitleView userStoryTitleView = new TitleView(modelStory, expansionController, globalController, userStoryController);
         userStoryTitleView.setId("story-" + modelStory.getId() + "_title_view");
         getChildren().add(userStoryTitleView);
     }
 
     private void setTasks() {
-        TaskManagementTaskListView taskListView = new TaskManagementTaskListView(tasks, listWidth, modelStory, userStoryController, expansionController);
+        TaskListView taskListView = new TaskListView(tasks, listWidth, modelStory, userStoryController, expansionController);
         taskListView.setId("story-" + modelStory.getId() + "_row-" + RowTitles.ROW_TITLES.get(Status.values()[0]).toLowerCase() + "_view");
 
         getChildren().add(taskListView);

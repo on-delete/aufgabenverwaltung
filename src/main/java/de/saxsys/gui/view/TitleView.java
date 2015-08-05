@@ -12,14 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class TaskManagementUserStoryTitleView extends VBox implements Expandable {
+public class TitleView extends VBox implements Expandable {
     ExpendableController expansionController;
     GlobalController globalController;
     UserStoryController userStoryController;
 
     UserStory modelStory;
 
-    public TaskManagementUserStoryTitleView(UserStory modelStory, ExpendableController expansionController, GlobalController globalController, UserStoryController userStoryController) {
+    public TitleView(UserStory modelStory, ExpendableController expansionController, GlobalController globalController, UserStoryController userStoryController) {
         this.globalController = globalController;
         this.modelStory = modelStory;
         this.expansionController = expansionController;

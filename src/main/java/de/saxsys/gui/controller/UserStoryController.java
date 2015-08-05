@@ -1,9 +1,9 @@
 package de.saxsys.gui.controller;
 
-import de.saxsys.gui.view.TaskManagementAddTaskView;
-import de.saxsys.gui.view.TaskManagementEditUserStoryView;
-import de.saxsys.gui.view.TaskManagementTaskView;
-import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
+import de.saxsys.gui.view.AddTaskView;
+import de.saxsys.gui.view.EditUserStoryView;
+import de.saxsys.gui.view.TaskView;
+import de.saxsys.gui.view.TitleView;
 import de.saxsys.model.UserStory;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,13 +21,13 @@ public class UserStoryController implements EventHandler<ActionEvent> {
         if (event.getEventType().equals(ActionEvent.ACTION)) {
             if (event.getSource() instanceof Button) {
                 Button source = (Button) event.getSource();
-                if ( (source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_addtask_button") ) {
+                if ( (source.getParent().getParent() instanceof TitleView) && source.getId().contains("_addtask_button") ) {
                     handleAddTask();
-                } else if ( (source.getParent().getParent() instanceof TaskManagementTaskView) && !source.getId().contains("_edit_button")) {
+                } else if ( (source.getParent().getParent() instanceof TaskView) && !source.getId().contains("_edit_button")) {
                     handleTaskOperations(source);
-                } else if ((source.getParent().getParent() instanceof TaskManagementUserStoryTitleView) && source.getId().contains("_edit_button")) {
+                } else if ((source.getParent().getParent() instanceof TitleView) && source.getId().contains("_edit_button")) {
                     handleEditUserStory();
-                } else if ((source.getParent().getParent() instanceof TaskManagementTaskView) && source.getId().contains("_edit_button")) {
+                } else if ((source.getParent().getParent() instanceof TaskView) && source.getId().contains("_edit_button")) {
                     handleEditTask(source);
                 }
             }
@@ -46,12 +46,12 @@ public class UserStoryController implements EventHandler<ActionEvent> {
 
     private void handleAddTask() {
         AddTaskController addTaskController = new AddTaskController(userStoryModel);
-        TaskManagementAddTaskView addView = new TaskManagementAddTaskView(addTaskController);
+        AddTaskView addView = new AddTaskView(addTaskController);
     }
 
     private void handleEditUserStory() {
         EditUserStoryController editUserStoryController = new EditUserStoryController(userStoryModel);
-        TaskManagementEditUserStoryView editView = new TaskManagementEditUserStoryView(editUserStoryController, userStoryModel);
+        EditUserStoryView editView = new EditUserStoryView(editUserStoryController, userStoryModel);
     }
 
     private void handleEditTask(Button source) {

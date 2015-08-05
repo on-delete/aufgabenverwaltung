@@ -10,11 +10,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class TaskManagementEditUserStoryView extends Stage {
+public class EditUserStoryView extends Stage {
     EditUserStoryController editUserStoryController;
     UserStory userStoryModel;
 
-    public TaskManagementEditUserStoryView(EditUserStoryController editUserStoryController, UserStory userStoryModel) {
+    public EditUserStoryView(EditUserStoryController editUserStoryController, UserStory userStoryModel) {
         this.editUserStoryController = editUserStoryController;
         this.userStoryModel = userStoryModel;
 

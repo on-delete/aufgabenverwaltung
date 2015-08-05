@@ -12,14 +12,14 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-public class TaskManagementTaskView extends VBox implements ActiveViewElement, Expandable {
+public class TaskView extends VBox implements ActiveViewElement, Expandable {
     Task taskModel;
     UserStory topUserStoryModel;
 
     UserStoryController userStoryController;
     ExpendableController expansionController;
 
-    public TaskManagementTaskView(Task taskModel, UserStory topUserStoryModel, UserStoryController userStoryController, ExpendableController expansionController) {
+    public TaskView(Task taskModel, UserStory topUserStoryModel, UserStoryController userStoryController, ExpendableController expansionController) {
         this.taskModel = taskModel;
         this.taskModel.registerView(this);
         this.topUserStoryModel = topUserStoryModel;

@@ -1,7 +1,6 @@
 package de.saxsys.gui.controller;
 
 import de.saxsys.gui.view.Expandable;
-import de.saxsys.gui.view.TaskManagementUserStoryTitleView;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Hyperlink;

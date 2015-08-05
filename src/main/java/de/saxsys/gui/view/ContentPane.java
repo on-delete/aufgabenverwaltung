@@ -6,9 +6,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 
-public class TaskManagementContentPane extends GridPane {
+public class ContentPane extends GridPane {
 
-    public TaskManagementContentPane(ReadOnlyDoubleProperty topWidth) {
+    public ContentPane(ReadOnlyDoubleProperty topWidth) {
 
         //write the title of the application
         Text title = new Text("Task Management");
@@ -16,7 +16,7 @@ public class TaskManagementContentPane extends GridPane {
         GridPane.setHalignment(title, HPos.LEFT);
 
 
-        Pane table = new TaskManagementTablePane(topWidth); //create the task table pane and hand down the global window width
+        Pane table = new TablePane(topWidth); //create the task table pane and hand down the global window width
         table.setId("table");
 
         add(title, 0, 0, 3, 1);

@@ -9,14 +9,14 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
-public class TaskManagementTablePane extends VBox implements ActiveViewElement {
+public class TablePane extends VBox implements ActiveViewElement {
     private GlobalController globalController;
 
     private UserStoryList globalModelInstance;
 
     private DoubleBinding columnWidth;
 
-    public TaskManagementTablePane(ReadOnlyDoubleProperty topWidth) {
+    public TablePane(ReadOnlyDoubleProperty topWidth) {
 
         //create global controller
         globalController = new GlobalController();
@@ -34,7 +34,7 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
     }
 
     private void setHeadings() {
-        TaskManagementHeadingView headings = new TaskManagementHeadingView(columnWidth); //create a heading view element and hand down the width of each column
+        HeadingView headings = new HeadingView(columnWidth); //create a heading view element and hand down the width of each column
         headings.setId("headings");
 
         getChildren().add(headings);
@@ -42,7 +42,7 @@ public class TaskManagementTablePane extends VBox implements ActiveViewElement {
 
     private void setUserstories() {
         for (UserStory story : globalModelInstance.getUserStories()) {
-            TaskManagementUserStoryView view = new TaskManagementUserStoryView(story, columnWidth, globalController); //create a userstory view element and hand down the width of each column and the global model instance
+            UserStoryView view = new UserStoryView(story, columnWidth, globalController); //create a userstory view element and hand down the width of each column and the global model instance
             view.setId("story-" + story.getId() + "_view");
 
             getChildren().add(view);
