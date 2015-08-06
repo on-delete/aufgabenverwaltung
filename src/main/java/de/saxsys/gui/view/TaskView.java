@@ -5,11 +5,14 @@ import de.saxsys.gui.controller.UserStoryController;
 import de.saxsys.model.Task;
 import de.saxsys.model.UserStory;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 public class TaskView extends VBox implements ActiveViewElement, Expandable {
@@ -32,7 +35,10 @@ public class TaskView extends VBox implements ActiveViewElement, Expandable {
     }
 
     private void setSimpleView() {
+        setPadding(new Insets(5.0, 5.0, 5.0, 5.0));
+
         HBox simpleView = new HBox();
+        simpleView.setSpacing(20.0);
 
         Hyperlink taskTitle = new Hyperlink("#T-" + taskModel.getId() + ": " + taskModel.getTitle());
         taskTitle.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_title_button");
@@ -62,9 +68,13 @@ public class TaskView extends VBox implements ActiveViewElement, Expandable {
     public void switchExpansion() {
         if (getChildren().size() < 2) {
             GridPane detailedView = new GridPane();
+            detailedView.setHgap(30.0);
+            detailedView.setVgap(10.0);
+            detailedView.setPadding(new Insets(5.0, 0.0, 0.0, 10.0));
 
             Text priorityText = new Text("Priority");
             priorityText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_priority_text");
+            priorityText.setFont(Font.font("Sans Serif", FontWeight.BLACK, 12));
             Text priorityValue = new Text(PriorityNames.PRIORITY_NAMES.get(taskModel.getPriority()));
             priorityText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_priority_value");
             detailedView.add(priorityText, 0, 0);
@@ -72,6 +82,7 @@ public class TaskView extends VBox implements ActiveViewElement, Expandable {
 
             Text descriptionText = new Text("Description");
             descriptionText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_description_text");
+            descriptionText.setFont(Font.font("Sans Serif", FontWeight.BLACK, 12));
             Text descriptionValue = new Text(taskModel.getDescription());
             descriptionText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_description_value");
             detailedView.add(descriptionText, 0, 1);
@@ -79,6 +90,7 @@ public class TaskView extends VBox implements ActiveViewElement, Expandable {
 
             Text inChargeText = new Text("Person in Charge");
             inChargeText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_inCharge_text");
+            inChargeText.setFont(Font.font("Sans Serif", FontWeight.BLACK, 12));
             Text inChargeValue = new Text(taskModel.getInCharge());
             inChargeText.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_inCharge_value");
             detailedView.add(inChargeText, 0, 2);
