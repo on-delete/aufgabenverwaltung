@@ -3,9 +3,6 @@ package de.saxsys.gui.controller;
 import de.saxsys.gui.view.AddUserStoryView;
 import de.saxsys.gui.view.TablePane;
 import de.saxsys.gui.view.TitleView;
-import de.saxsys.model.Priority;
-import de.saxsys.model.Task;
-import de.saxsys.model.UserStory;
 import de.saxsys.model.UserStoryList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,8 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GlobalController implements EventHandler<ActionEvent> {
     UserStoryList globalModelInstance;

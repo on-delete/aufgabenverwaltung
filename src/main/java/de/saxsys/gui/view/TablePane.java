@@ -6,7 +6,6 @@ import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;

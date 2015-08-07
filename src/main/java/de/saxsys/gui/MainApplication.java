@@ -3,7 +3,6 @@ package de.saxsys.gui;
 
 import de.saxsys.gui.controller.GlobalController;
 import de.saxsys.gui.view.RootPane;
-import io.vertx.core.Vertx;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
