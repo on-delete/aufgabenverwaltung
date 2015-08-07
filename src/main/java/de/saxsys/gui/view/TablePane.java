@@ -7,6 +7,7 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 
 public class TablePane extends VBox implements ActiveViewElement {
@@ -25,7 +26,7 @@ public class TablePane extends VBox implements ActiveViewElement {
         //register to global model instance
         globalModelInstance.registerView(this);
 
-        columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
+        columnWidth = topWidth.subtract(103.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
 
         //building view
         setHeadings();
@@ -41,12 +42,18 @@ public class TablePane extends VBox implements ActiveViewElement {
     }
 
     private void setUserstories() {
+        VBox userStories = new VBox();
         for (UserStory story : globalModelInstance.getUserStories()) {
             UserStoryView view = new UserStoryView(story, columnWidth, globalController); //create a userstory view element and hand down the width of each column and the global model instance
             view.setId("story-" + story.getId() + "_view");
 
-            getChildren().add(view);
+            userStories.getChildren().add(view);
         }
+
+        ScrollPane scrollPane = new ScrollPane(userStories);
+        scrollPane.setPrefWidth(1400.0);
+        scrollPane.setPrefHeight(900.00);
+        getChildren().add(scrollPane);
     }
 
     private void setAddButton() {
