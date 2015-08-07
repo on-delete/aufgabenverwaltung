@@ -53,7 +53,7 @@ public class TablePane extends VBox implements ActiveViewElement {
         }
 
         ScrollPane scrollPane = new ScrollPane(userStories);
-        scrollPane.setPrefHeight(900.00);
+        scrollPane.setPrefHeight(1000.00);
         getChildren().add(scrollPane);
     }
 

@@ -25,7 +25,7 @@ public class ContentPane extends GridPane {
         add(title, 0, 0, 3, 1);
         add(table, 0, 2, 3, 1);
 
-        setPadding(new Insets(20.0, 50.0, 50.0, 50.0));
+        setPadding(new Insets(20.0, 50.0, 20.0, 50.0));
         setId("content");
         setVgap(10);
     }
