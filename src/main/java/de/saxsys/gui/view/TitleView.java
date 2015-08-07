@@ -57,7 +57,7 @@ public class TitleView extends VBox implements Expandable {
 
         Button deleteButton = new Button("Delete");
         deleteButton.setId("story-" + modelStory.getId() + "_delete_button");
-        deleteButton.addEventHandler(ActionEvent.ACTION, userStoryController);
+        deleteButton.addEventHandler(ActionEvent.ACTION, globalController);
 
 
         simpleView.getChildren().addAll(storyTitle, moveDownButton, moveUpButton, deleteButton, addTaskButton);
