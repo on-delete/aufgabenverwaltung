@@ -33,12 +33,13 @@ public class TitleView extends VBox implements Expandable {
     }
 
     private void setSimpleView() {
-        setPadding(new Insets(0.0, 0.0, 5.0, 10.0));
+        setPadding(new Insets(0.0, 0.0, 5.0, 12.0));
 
         HBox simpleView = new HBox();
         simpleView.setSpacing(20.0);
 
         Hyperlink storyTitle = new Hyperlink("#U-" + modelStory.getId() + ": " + modelStory.getTitle());
+        storyTitle.setPrefWidth(100.0);
         storyTitle.setId("story-" + modelStory.getId() + "_title_link");
         storyTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 

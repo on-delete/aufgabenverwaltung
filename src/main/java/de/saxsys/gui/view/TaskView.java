@@ -41,6 +41,7 @@ public class TaskView extends VBox implements ActiveViewElement, Expandable {
         simpleView.setSpacing(20.0);
 
         Hyperlink taskTitle = new Hyperlink("#T-" + taskModel.getId() + ": " + taskModel.getTitle());
+        taskTitle.setPrefWidth(100.0);
         taskTitle.setId("story-" + topUserStoryModel.getId() + "task-" + taskModel.getTitle() + "_title_button");
         taskTitle.addEventHandler(ActionEvent.ACTION, expansionController);
 

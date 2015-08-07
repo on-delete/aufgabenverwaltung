@@ -6,6 +6,7 @@ import de.saxsys.model.UserStoryList;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
@@ -26,9 +27,10 @@ public class TablePane extends VBox implements ActiveViewElement {
         //register to global model instance
         globalModelInstance.registerView(this);
 
-        columnWidth = topWidth.subtract(103.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
+        columnWidth = topWidth.subtract(100.0).divide(RowTitles.ROW_TITLES.size()); //calculate the width of each column from the width of the global window (including space for margin)
 
         //building view
+        setSpacing(10.0);
         setHeadings();
         setUserstories();
         setAddButton();
@@ -51,7 +53,6 @@ public class TablePane extends VBox implements ActiveViewElement {
         }
 
         ScrollPane scrollPane = new ScrollPane(userStories);
-        scrollPane.setPrefWidth(1400.0);
         scrollPane.setPrefHeight(900.00);
         getChildren().add(scrollPane);
     }
