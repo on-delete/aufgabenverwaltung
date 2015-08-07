@@ -16,10 +16,10 @@ public class TablePane extends VBox implements ActiveViewElement {
 
     private DoubleBinding columnWidth;
 
-    public TablePane(ReadOnlyDoubleProperty topWidth) {
+    public TablePane(ReadOnlyDoubleProperty topWidth, GlobalController globalController) {
 
         //create global controller
-        globalController = new GlobalController();
+        this. globalController = globalController;
         globalModelInstance = globalController.getGlobalModelInstance();
 
         //register to global model instance

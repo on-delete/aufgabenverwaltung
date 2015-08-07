@@ -1,5 +1,6 @@
 package de.saxsys.gui.view;
 
+import de.saxsys.gui.controller.GlobalController;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -9,7 +10,7 @@ import javafx.scene.text.Text;
 
 public class ContentPane extends GridPane {
 
-    public ContentPane(ReadOnlyDoubleProperty topWidth) {
+    public ContentPane(ReadOnlyDoubleProperty topWidth, GlobalController globalController) {
 
 
         //write the title of the application
@@ -18,7 +19,7 @@ public class ContentPane extends GridPane {
         GridPane.setHalignment(title, HPos.LEFT);
 
 
-        Pane table = new TablePane(topWidth); //create the task table pane and hand down the global window width
+        Pane table = new TablePane(topWidth, globalController); //create the task table pane and hand down the global window width
         table.setId("table");
 
         add(title, 0, 0, 3, 1);
